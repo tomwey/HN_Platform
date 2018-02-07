@@ -1,0 +1,30 @@
+<style>
+BODY,body {
+    font-size: 20px!important;
+}
+P,p,SPAN,span,DIV,div {
+font-size: 36px!important;
+line-height: 150%!important;
+margin: 0;
+padding: 0;
+text-indent: 2em!important;
+margin-bottom: 8px!important;
+
+}
+
+IMG,img {
+display: block;
+max-width: 100%!important;
+max-height: 100%!important;
+width: 100%!important;
+height: auto;
+margin: 0 auto;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+TABLE,table {
+max-width: 100%!important;
+width: 100%!important;
+height: auto;
+}
+</style>

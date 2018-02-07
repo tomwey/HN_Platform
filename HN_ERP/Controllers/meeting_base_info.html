@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no,width=device-width,height=device-height">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title></title>
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+    body {
+      background-color: rgb(247,247,247);
+      font-size: 15px;
+      color: rgb(58,58,58);
+      width: 100%;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+    }
+    
+    a {
+      color: rgb(58,58,58);
+      text-decoration: underline;
+    }
+    
+    .panel {
+      
+      background-color: white;
+      margin-bottom: 5px;
+      padding: 10px 15px;
+    }
+    
+    .panel h1 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: rgb(58,58,58);
+    }
+    
+    .base-info {
+      padding-bottom: 10px;
+    }
+    
+    .base-info table td {
+      vertical-align: top;
+      padding: 5px 0;
+    }
+    
+    .base-info table td.label {
+      color: rgb(168,168,168);
+      width: 75px;
+/*      text-align: right;*/
+/*      margin-top: 15px;*/
+    }
+    
+    .base-info table {
+        max-width: 100%;
+    }
+    
+    .base-info table td.value-max-width {
+      max-width: 30%;
+    }
+    
+    .attachments {
+      list-style: none;
+    }
+    
+    .attachments li a {
+      display: block;
+      padding: 5px 0;
+    }
+    
+    </style>
+  </head>
+  <body>
+    <!-- 基本信息 -->
+    <div class="panel base-info">
+        <h1>${title}</h1>
+      <table>
+        <tr>
+          <td class="label">会议类型:</td>
+          <td>${meetingType}</td>
+          <td class="label">会议地点:</td>
+          <td class="value-max-width">${meetingRoom}</td>
+        </tr>
+        <tr>
+          <td class="label">主责部门:</td>
+          <td class="value-max-width">${dept}</td>
+          <td class="label">会议主持:</td>
+          <td>${meetingZC}</td>
+        </tr>
+        <tr>
+          <td class="label">会议时间:</td>
+          <td colspan="3">${meetingTime}</td>
+        </tr>
+        <tr>
+          <td class="label">参会人员:</td>
+          <td colspan="3">${joinMans}</td>
+        </tr>
+      </table>
+    </div>
+    
+    <!-- 会议决议 -->
+    <div class="panel">
+      <h1>会议决议</h1>
+      <div class="jy">
+          ${meetingBody}
+      </div>
+    </div>
+    <!-- 会议相关附件 -->
+    <div class="panel">
+      <h1>会议纪要相关附件</h1>
+      <ul class="attachments">
+          ${attachments}
+<!--        <li><a href="#">附件20170727114010.docx</a></li>-->
+<!--        <li><a href="#">附件20170727114010.xlsx</a></li>-->
+<!--        <li><a href="#">附件20170727114010.jpg</a></li>-->
+<!--        <li><a href="#">附件20170727114010.pptx</a></li>-->
+      </ul>
+    </div>
+  </body>
+</html>

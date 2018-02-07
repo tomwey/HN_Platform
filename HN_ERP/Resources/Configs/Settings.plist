@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>icon</key>
+			<string>icon_update_pass.png</string>
+			<key>label</key>
+			<string>修改密码</string>
+			<key>action</key>
+			<string>updatePassword</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>icon_clean_cache.png</string>
+			<key>label</key>
+			<string>清除缓存</string>
+			<key>value</key>
+			<string>cache</string>
+			<key>action</key>
+			<string>clearCache</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>icon_feedback.png</string>
+			<key>label</key>
+			<string>意见反馈</string>
+			<key>action</key>
+			<string>gotoFeedback</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>icon_upgrade.png</string>
+			<key>label</key>
+			<string>检测更新</string>
+			<key>value</key>
+			<string>version</string>
+			<key>action</key>
+			<string>checkVersion</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>icon_qrcode.png</string>
+			<key>label</key>
+			<string>扫码下载</string>
+			<key>value</key>
+			<string></string>
+			<key>action</key>
+			<string>openQRCode</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>icon</key>
+			<string></string>
+			<key>label</key>
+			<string>退出登录</string>
+			<key>action</key>
+			<string>logout</string>
+		</dict>
+	</array>
+</array>
+</plist>
