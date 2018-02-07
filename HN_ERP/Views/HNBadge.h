@@ -19,4 +19,6 @@
 
 @property (nonatomic, assign) CGPoint position;
 
+@property (nonatomic, assign, readonly) CGSize badgeSize;
+
 @end

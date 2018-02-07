@@ -52,6 +52,15 @@
         self.badgeLabel.cornerRadius = self.badgeLabel.height / 2;
         self.badgeLabel.position = self.position;
     }
+    
+    if ( !self.badgeLabel.superview ) {
+        [self.badgeContainer addSubview:self.badgeLabel];
+    }
+}
+
+- (CGSize)badgeSize
+{
+    return self.badgeLabel.bounds.size;
 }
 
 - (void)setPosition:(CGPoint)position

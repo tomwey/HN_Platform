@@ -21,6 +21,8 @@
 
 @property (nonatomic, strong) NSArray *dataSource;
 
+@property (nonatomic, strong) NSArray *badges;
+
 @end
 
 @implementation WorkVC
@@ -43,11 +45,25 @@
 //    [[HNNewFlowCountService sharedInstance] unregisterObserver:self.badge];
 }
 
+- (void)initBadges
+{
+    HNBadge *b1 = [[HNBadge alloc] initWithBadge:0 inView:nil];
+    HNBadge *b2 = [[HNBadge alloc] initWithBadge:0 inView:nil];
+    
+    [[HNBadgeService sharedInstance] registerObserver:b1 forKey:@"flows"];
+    [[HNBadgeService sharedInstance] registerObserver:b2 forKey:@"plans"];
+    
+    self.badges = @[b1,b2];
+    
+    [[HNBadgeService sharedInstance] startMonitor];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
 //    self.navBar.title = @"合能地产";
+    [self initBadges];
     
 //    self.automaticallyAdjustsScrollViewInsets = NO;
     
@@ -200,6 +216,20 @@
     cell.textLabel.font  = AWSystemFontWithSize(16, NO);
     
     cell.textLabel.textColor = AWColorFromHex(@"#333333");
+    
+    if ( indexPath.section == 0 && indexPath.row != 2 ) {
+        HNBadge *badge = self.badges[indexPath.row];
+        
+        badge.badgeContainer = cell.contentView;
+        
+        badge.badge = 100;
+        
+        badge.position = CGPointMake(self.contentView.width - 30 - badge.badgeSize.width,
+                                     self.tableView.rowHeight / 2.0 - 9);
+        
+        badge.badge = 0;
+        
+    }
     
     return cell;
 }
