@@ -33,7 +33,7 @@
     
     self.navBar.title = @"计划";
     
-    [self addRightItemWithView:self.segControl rightMargin:10];
+//    [self addRightItemWithView:self.segControl rightMargin:10];
     
     // 创建滚动标签
     self.tabStrip = [[AWPagerTabStrip alloc] init];
@@ -54,7 +54,7 @@
     self.swipeView.delegate   = self;
     
     // 加载数据
-    self.tabTitles = @[@"月度",@"项目",@"专项"];
+    self.tabTitles = @[@"项目",@"专项"];
     
     self.tabStrip.tabWidth = (self.contentView.width / self.tabTitles.count);
     
@@ -65,14 +65,15 @@
     // 加载第一页
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         //[self doSearch:@""];
-        PlanListView *listView = (PlanListView *)[self swipeSubviewForIndex:0];
-        listView.didSelectBlock = ^(PlanListView *sender, id selectedItem) {
-            UIViewController *vc =
-                [[AWMediator sharedInstance] openVCWithName:@"PlanDetailVC"
-                                                     params:selectedItem ?: @{}];
-            [self.navigationController pushViewController:vc animated:YES];
-        };
-        listView.dataType = -1;
+        PlanProjectView *listView = (PlanProjectView *)[self swipeSubviewForIndex:0];
+        listView.userData = @"0";
+//        listView.didSelectBlock = ^(PlanListView *sender, id selectedItem) {
+//            UIViewController *vc =
+//                [[AWMediator sharedInstance] openVCWithName:@"PlanDetailVC"
+//                                                     params:selectedItem ?: @{}];
+//            [self.navigationController pushViewController:vc animated:YES];
+//        };
+//        listView.dataType = -1;
         [listView startLoading];
     });
 }
@@ -93,15 +94,18 @@
     [self.tabStrip setSelectedIndex:swipeView.currentPage animated:YES];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[self swipeSubviewForIndex:swipeView.currentPage] performSelector:@selector(startLoading) withObject:nil];
+        UIView *view = [self swipeSubviewForIndex:swipeView.currentPage];
+        view.userData = [@(swipeView.currentPage) description];
+        
+        [view performSelector:@selector(startLoading) withObject:nil];
     });
     
-    if ( self.swipeView.currentPage == 0 ) {
-        [self addRightItemWithView:self.segControl rightMargin:10];
-    } else {
-        [self addRightItemWithView:nil];
-        _segControl = nil;
-    }
+//    if ( self.swipeView.currentPage == 0 ) {
+//        [self addRightItemWithView:self.segControl rightMargin:10];
+//    } else {
+//        [self addRightItemWithView:nil];
+//        _segControl = nil;
+//    }
 }
 
 - (NSInteger)numberOfTabs:(AWPagerTabStrip *)tabStrip
@@ -122,9 +126,9 @@
 
 - (UIView *)swipeSubviewForIndex:(NSInteger)index
 {
-    static const int viewCount = 3;
+    static const int viewCount = 2;
     static NSString * viewNames[viewCount] = {
-                                      @"PlanListView",
+                                      //@"PlanListView",
                                       @"PlanProjectView",
                                       @"PlanProjectView"
                                     };
@@ -138,6 +142,15 @@
         view = [[NSClassFromString(viewNames[index]) alloc] init];
         view.frame = self.swipeView.bounds;
         self.swipeSubviews[@(index)] = view;
+        
+        if ([view isKindOfClass:[PlanProjectView class]]) {
+            PlanProjectView *projView = (PlanProjectView *)view;
+            __weak typeof(self) me = self;
+            projView.didSelectItem = ^(PlanProjectView *sender, id inItem) {
+                UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"AttachmentPreviewVC" params:@{ @"item": inItem }];
+                [me.navigationController pushViewController:vc animated:YES];
+            };
+        }
     }
     return view;
 }

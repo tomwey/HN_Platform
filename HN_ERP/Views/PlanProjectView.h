@@ -10,6 +10,8 @@
 
 @interface PlanProjectView : UIView
 
+@property (nonatomic, copy) void (^didSelectItem)(PlanProjectView *sender, id item);
+
 - (void)startLoading;
 
 @end

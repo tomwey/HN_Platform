@@ -70,7 +70,7 @@
     [[self apiServiceWithName:@"APIService"]
      POST:nil
      params:@{ @"dotype": @"GetData",
-               @"funname": @"版本信息查询APP",
+               @"funname": @"平台用户版本信息查询APP",
                @"param1": AWAppVersion(),
                @"param2": @"iOS",
                }
