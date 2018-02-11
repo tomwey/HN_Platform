@@ -54,7 +54,7 @@
     self.swipeView.delegate   = self;
     
     // 加载数据
-    self.tabTitles = @[@"项目",@"专项"];
+    self.tabTitles = @[@"总控", @"专项"];
     
     self.tabStrip.tabWidth = (self.contentView.width / self.tabTitles.count);
     

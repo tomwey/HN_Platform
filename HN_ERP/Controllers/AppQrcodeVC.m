@@ -22,7 +22,7 @@
     
     UIImageView *imageView = AWCreateImageView(nil);
     [self.contentView addSubview:imageView];
-    imageView.image = AWImageNoCached(@"hnapp-qrcode.png");
+    imageView.image = AWImageNoCached(@"hnapp-qrcode.jpg");
     imageView.frame = CGRectMake(0, 0, 150, 150);
     
     imageView.center = CGPointMake(self.contentView.width / 2,

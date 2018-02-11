@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
-	<string>合能平台APP</string>
+	<string>远能ERP</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIconFiles</key>

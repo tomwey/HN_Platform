@@ -325,27 +325,27 @@
         _conChartView = [[BIChartView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.width, 340)];
         [self.chartScrollView addSubview:_conChartView];
         
-        __weak typeof(self) weakSelf = self;
-        _conChartView.didClickChartBlock = ^(BIChartView *sender) {
-            
-            NSDictionary *params = @{ @"timeData": @{
-                                              @"year": [@(weakSelf.timeSelect.year) description],
-                                              @"quarter": [@(weakSelf.timeSelect.quarter) description],
-                                              @"month": [@(weakSelf.timeSelect.month) description],
-                                              @"week": [@(weakSelf.timeSelect.weekOfMonth) description],
-                                              },
-                                      @"area": @{
-                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description] ?: @"0",
-                                                @"name": weakSelf.areaButton.userData[@"area_name"] ?: @"全集团"
-                                              },
-                                      @"industry": @{
-                                              @"id": @"0",
-                                              @"name": @"",
-                                              },
-                                      @"action": @"签约"};
-            UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"BIBarDetailVC" params:params];
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-        };
+//        __weak typeof(self) weakSelf = self;
+//        _conChartView.didClickChartBlock = ^(BIChartView *sender) {
+//
+//            NSDictionary *params = @{ @"timeData": @{
+//                                              @"year": [@(weakSelf.timeSelect.year) description],
+//                                              @"quarter": [@(weakSelf.timeSelect.quarter) description],
+//                                              @"month": [@(weakSelf.timeSelect.month) description],
+//                                              @"week": [@(weakSelf.timeSelect.weekOfMonth) description],
+//                                              },
+//                                      @"area": @{
+//                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description] ?: @"0",
+//                                                @"name": weakSelf.areaButton.userData[@"area_name"] ?: @"全集团"
+//                                              },
+//                                      @"industry": @{
+//                                              @"id": @"0",
+//                                              @"name": @"",
+//                                              },
+//                                      @"action": @"签约"};
+//            UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"BIBarDetailVC" params:params];
+//            [weakSelf.navigationController pushViewController:vc animated:YES];
+//        };
     }
     return _conChartView;
 }
@@ -356,30 +356,30 @@
         _feeChartView = [[BIChartView alloc] initWithFrame:self.conChartView.bounds];
         [self.chartScrollView addSubview:_feeChartView];
         
-        __weak typeof(self) weakSelf = self;
-        _feeChartView.didClickChartBlock = ^(BIChartView *sender) {
-            
-            NSDictionary *params = @{ @"timeData": @{
-                                              @"year": [@(weakSelf.timeSelect.year) description],
-                                              @"quarter": [@(weakSelf.timeSelect.quarter) description],
-                                              @"month": [@(weakSelf.timeSelect.month) description],
-                                              @"week": [@(weakSelf.timeSelect.weekOfMonth) description],
-//                                              @"year": @"2017",
-//                                              @"value": @"",
+//        __weak typeof(self) weakSelf = self;
+//        _feeChartView.didClickChartBlock = ^(BIChartView *sender) {
+//
+//            NSDictionary *params = @{ @"timeData": @{
+//                                              @"year": [@(weakSelf.timeSelect.year) description],
+//                                              @"quarter": [@(weakSelf.timeSelect.quarter) description],
+//                                              @"month": [@(weakSelf.timeSelect.month) description],
+//                                              @"week": [@(weakSelf.timeSelect.weekOfMonth) description],
+////                                              @"year": @"2017",
+////                                              @"value": @"",
+////                                              @"name": @"",
+//                                              },
+//                                      @"area": @{
+//                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description],
+//                                              @"name": weakSelf.areaButton.userData[@"area_name"]
+//                                              },
+//                                      @"industry": @{
+//                                              @"id": @"0",
 //                                              @"name": @"",
-                                              },
-                                      @"area": @{
-                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description],
-                                              @"name": weakSelf.areaButton.userData[@"area_name"]
-                                              },
-                                      @"industry": @{
-                                              @"id": @"0",
-                                              @"name": @"",
-                                              },
-                                      @"action": @"回款"};
-            UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"BIBarDetailVC" params:params];
-            [weakSelf.navigationController pushViewController:vc animated:YES];
-        };
+//                                              },
+//                                      @"action": @"回款"};
+//            UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"BIBarDetailVC" params:params];
+//            [weakSelf.navigationController pushViewController:vc animated:YES];
+//        };
     }
     return _feeChartView;
 }
