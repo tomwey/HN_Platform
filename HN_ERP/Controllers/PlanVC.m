@@ -77,7 +77,19 @@
         [listView startLoading];
     });
     
-//    总控计划列表查询APP
+    id user = [[UserService sharedInstance] currentUser];
+    
+    [[self apiServiceWithName:@"APIService"]
+     POST:nil
+     params:@{
+              @"dotype": @"GetData",
+              @"funname": @"总控计划列表查询APP",
+              @"param1": [user[@"man_id"] ?: @"0" description],
+              @"param2": @"0",
+              @"param3": @"1",
+              } completion:^(id result, NSError *error) {
+                  
+              }];
 }
 
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView

@@ -208,7 +208,7 @@
     [[self apiServiceWithName:@"APIService"]
      POST:nil params:@{
                        @"dotype": @"GetData",
-                       @"funname": @"移动端公文标记已读",
+                       @"funname": @"专项计划公文已读APP",
                        @"param1": manID,
                        @"param2": self.params[@"item"][@"docid"] ?: @"0",
                        } completion:^(id result, NSError *error) {
