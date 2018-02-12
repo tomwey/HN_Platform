@@ -76,6 +76,8 @@
 //        listView.dataType = -1;
         [listView startLoading];
     });
+    
+//    总控计划列表查询APP
 }
 
 - (NSInteger)numberOfItemsInSwipeView:(SwipeView *)swipeView

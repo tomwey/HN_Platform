@@ -191,7 +191,8 @@
     [[self apiServiceWithName:@"APIService"]
      POST:nil params:@{ @"dotype": @"login",
                         @"username": [[self.userField.text trim] lowercaseString],
-                        @"password": self.passField.text//[[self.passField.text md5Hash] uppercaseString]
+                        @"password": self.passField.text,//[[self.passField.text md5Hash] uppercaseString]
+                        @"mantype": @"2"
                         }
      completion:^(id result, NSError *error) {
          [HNProgressHUDHelper hideHUDForView:self.contentView animated:YES];

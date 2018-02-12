@@ -101,13 +101,23 @@
     manID = manID ?: @"0";
     
     __weak typeof(self) me = self;
+//    [[self apiServiceWithName:@"APIService"]
+//     POST:nil
+//     params:@{
+//              @"dotype": @"GetData",
+//              @"funname": @"BI区域权限查询APP",
+//              @"param1": manID,
+////              @"param2": @"0",
+//              } completion:^(id result, NSError *error) {
+//                  [me handleResult:result error:error];
+//              }];
+    
     [[self apiServiceWithName:@"APIService"]
      POST:nil
      params:@{
               @"dotype": @"GetData",
-              @"funname": @"BI区域权限查询APP",
+              @"funname": @"平台经营分析项目列表查询APP",
               @"param1": manID,
-//              @"param2": @"0",
               } completion:^(id result, NSError *error) {
                   [me handleResult:result error:error];
               }];
@@ -115,13 +125,18 @@
 
 - (void)handleResult:(id)result error:(NSError *)error
 {
+//    [HNProgressHUDHelper hideHUDForView:self.contentView animated:YES];
+//    if ( error ) {
+//        [self.contentView showHUDWithText:@"获取区域失败" succeed:NO];
+//    } else {
+//        [self prepareAreaData:result];
+//    }
     [HNProgressHUDHelper hideHUDForView:self.contentView animated:YES];
     if ( error ) {
-        [self.contentView showHUDWithText:@"获取区域失败" succeed:NO];
+        [self.contentView showHUDWithText:@"获取项目失败" succeed:NO];
     } else {
         [self prepareAreaData:result];
     }
-    
 }
 
 - (void)prepareAreaData:(id)result
@@ -139,9 +154,9 @@
     }
     
     id area = [self fetchUserDefaultArea:self.areaData];
-    NSString *title = [NSString stringWithFormat:@"%@%@", area[@"area_name"], CARET_SYMBOL];
+    NSString *title = [NSString stringWithFormat:@"%@%@", area[@"project_name"], CARET_SYMBOL];
     if ( !area ) {
-        title = @"选择区域";
+        title = @"选择项目";
     }
 //    [self.areaButton setTitle:title forState:UIControlStateNormal];
     self.areaButton.title = title;
@@ -159,7 +174,7 @@
     
     [HNProgressHUDHelper showHUDAddedTo:self.contentView animated:YES];
     
-    NSString *areaId = [self.areaButton.userData[@"area_id"] description];
+    NSString *areaId = [self.areaButton.userData[@"project_id"] description];
     NSString *quarterId = [@(self.timeSelect.quarter) description];
     __weak typeof(self) me = self;
     [[self apiServiceWithName:@"APIService"]
@@ -220,14 +235,14 @@
         return nil;
     }
     
-    id user = [[UserService sharedInstance] currentUser];
-    
-    // 如果有默认区域，返回默认区域
-    for (id area in areaData) {
-        if ( [area[@"area_id"] integerValue] == [user[@"area_id"] integerValue] ) {
-            return area;
-        }
-    }
+//    id user = [[UserService sharedInstance] currentUser];
+//
+//    // 如果有默认区域，返回默认区域
+//    for (id area in areaData) {
+//        if ( [area[@"project_id"] integerValue] == [user[@"project_id"] integerValue] ) {
+//            return area;
+//        }
+//    }
     
     // 否则返回第一个区域，注：第一个数据默认后台返回的是全集团
     return [areaData firstObject];
@@ -247,8 +262,8 @@
     NSMutableArray *temp = [[NSMutableArray alloc] initWithCapacity:data.count];
     for (int i=0; i<data.count; i++) {
         id dict = data[i];
-        NSString *name = dict[@"name"] ?: dict[@"area_name"];
-        id value = dict[@"id"] ?: dict[@"area_id"];
+        NSString *name = dict[@"name"] ?: dict[@"project_name"];
+        id value = dict[@"id"] ?: dict[@"project_id"];
         id pair = @{ @"name": name,
                      @"value": value
                      };
@@ -271,8 +286,8 @@
     picker.didSelectOptionBlock = ^(SelectPicker *sender, id selectedOption, NSInteger index) {
         if ( data == self.areaData ) {
             self.areaButton.userData = data[index];
-//            [self.areaButton setTitle:[NSString stringWithFormat:@"%@%@", self.areaButton.userData[@"area_name"], CARET_SYMBOL] forState:UIControlStateNormal];
-            self.areaButton.title = [NSString stringWithFormat:@"%@%@", self.areaButton.userData[@"area_name"], CARET_SYMBOL];
+//            [self.areaButton setTitle:[NSString stringWithFormat:@"%@%@", self.areaButton.userData[@"project_name"], CARET_SYMBOL] forState:UIControlStateNormal];
+            self.areaButton.title = [NSString stringWithFormat:@"%@%@", self.areaButton.userData[@"project_name"], CARET_SYMBOL];
         }
         
         [self startLoadData];
@@ -335,8 +350,8 @@
 //                                              @"week": [@(weakSelf.timeSelect.weekOfMonth) description],
 //                                              },
 //                                      @"area": @{
-//                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description] ?: @"0",
-//                                                @"name": weakSelf.areaButton.userData[@"area_name"] ?: @"全集团"
+//                                              @"id": [weakSelf.areaButton.userData[@"project_id"] description] ?: @"0",
+//                                                @"name": weakSelf.areaButton.userData[@"project_name"] ?: @"全集团"
 //                                              },
 //                                      @"industry": @{
 //                                              @"id": @"0",
@@ -369,8 +384,8 @@
 ////                                              @"name": @"",
 //                                              },
 //                                      @"area": @{
-//                                              @"id": [weakSelf.areaButton.userData[@"area_id"] description],
-//                                              @"name": weakSelf.areaButton.userData[@"area_name"]
+//                                              @"id": [weakSelf.areaButton.userData[@"project_id"] description],
+//                                              @"name": weakSelf.areaButton.userData[@"project_name"]
 //                                              },
 //                                      @"industry": @{
 //                                              @"id": @"0",
