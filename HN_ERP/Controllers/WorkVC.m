@@ -51,7 +51,7 @@
     HNBadge *b2 = [[HNBadge alloc] initWithBadge:0 inView:nil];
     
     [[HNBadgeService sharedInstance] registerObserver:b1 forKey:@"flows"];
-    [[HNBadgeService sharedInstance] registerObserver:b2 forKey:@"plans"];
+    [[HNBadgeService sharedInstance] registerObserver:b2 forKey:@"workplans"];
     
     self.badges = @[b1,b2];
     
