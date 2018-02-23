@@ -8,22 +8,25 @@
 
 #import "PlanListView.h"
 #import "Defines.h"
-#import "YearMonthPickerView.h"
+#import "AWFilterView.h"
 
-@interface PlanListView () <UITableViewDelegate>
+@interface PlanListView () <UITableViewDelegate, UISearchBarDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) AWTableViewDataSource *dataSource;
 
 @property (nonatomic, assign) BOOL loading;
 
-@property (nonatomic, strong) NSArray *testAllPlans;
-@property (nonatomic, strong) NSArray *testNoCompletedPlans;
+@property (nonatomic, strong) UIView *filterBox;
 
-@property (nonatomic, strong) DateSelectControl *dateSelectControl;
+@property (nonatomic, strong) DMButton *projButton;
 
-@property (nonatomic, strong) NSDate *currentDate;
-@property (nonatomic, strong) YearMonthPickerView *pickerView;
+@property (nonatomic, strong) NSMutableArray *projOptions;
+
+@property (nonatomic, strong) DMButton *levelButton;
+@property (nonatomic, strong) DMButton *dateBtn;
+
+@property (nonatomic, strong) UISearchBar *searchBar;
 
 @end
 
@@ -32,10 +35,10 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if ( self = [super initWithFrame:frame] ) {
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(loadPlans)
-                                                     name:@"kPlanFlowDidCommitNotification"
-                                                   object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(loadPlans)
+//                                                     name:@"kPlanFlowDidCommitNotification"
+//                                                   object:nil];
     }
     return self;
 }
@@ -49,11 +52,20 @@
 {
     [super layoutSubviews];
     
-    self.dateSelectControl.frame = CGRectMake(15, 0, self.width - 30, 60);
+//    self.dateSelectControl.frame = CGRectMake(15, 0, self.width - 30, 60);
+    
+    self.dateBtn.frame =
+    self.projButton.frame =
+    self.levelButton.frame = CGRectMake(0, 0, self.width / 3.0, 40);
+    
+    self.levelButton.left = self.projButton.right;
+    self.dateBtn.left = self.levelButton.right;
+    
+    self.searchBar.position = CGPointMake(5, self.projButton.bottom);
     
     self.tableView.frame = self.bounds;
-    self.tableView.top = self.dateSelectControl.bottom;
-    self.tableView.height = self.height - self.dateSelectControl.height;
+    self.tableView.top = self.filterBox.bottom;
+    self.tableView.height = self.height - self.filterBox.height;
 }
 
 - (void)startLoading
@@ -61,11 +73,9 @@
     [self loadPlans];
 }
 
-- (NSDateComponents *)dateComponetsFromDate:(NSDate *)date
+- (void)closeFilterView
 {
-    NSCalendar *calender = [NSCalendar currentCalendar];
-    NSDateComponents *comp = [calender components:NSCalendarUnitYear | NSCalendarUnitMonth fromDate:date];
-    return comp;
+    [[self.superview viewWithTag:11022] removeFromSuperview];
 }
 
 - (void)loadPlans
@@ -77,12 +87,6 @@
     [self.tableView removeErrorOrEmptyTips];
     
     [HNProgressHUDHelper showHUDAddedTo:self animated:YES];
-    
-    NSInteger year = [self dateComponetsFromDate:self.currentDate].year;
-    NSInteger month = [self dateComponetsFromDate:self.currentDate].month;
-    
-    NSString *yearStr = [@(year) description];
-    NSString *monthStr = [@(month) description];
     
     id user = [[UserService sharedInstance] currentUser];
     NSString *manID = [user[@"man_id"] description];
@@ -96,9 +100,9 @@
                        @"dotype": @"GetData",
                        @"funname": @"工作计划查询APP",
                        @"param1": manID,
-                       @"param2": yearStr,
-                       @"param3": monthStr,
-                       @"param4": [@(self.dataType) description],
+                       @"param2": @"",
+                       @"param3": @"",
+                       @"param4": @"",
                        } completion:^(id result, NSError *error) {
                            __strong PlanListView *strongSelf = weakSelf;
                            if ( strongSelf ) {
@@ -128,6 +132,8 @@
         }
         [self.tableView reloadData];
     }
+    
+    [self.superview bringSubviewToFront:[self.superview viewWithTag:11022]];
 }
 
 // 项目，层级，计划名称，完成时间，是否完成
@@ -140,12 +146,286 @@
     }
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    [self.searchBar resignFirstResponder];
+}
+
 - (AWTableViewDataSource *)dataSource
 {
     if ( !_dataSource ) {
         _dataSource = [[AWTableViewDataSource alloc] initWithArray:nil cellClass:@"PlanCell" identifier:@"cell.plan.id"];
     }
     return _dataSource;
+}
+
+- (UIView *)filterBox
+{
+    if ( !_filterBox ) {
+        _filterBox = [[UIView alloc] initWithFrame:CGRectMake(0, 0, AWFullScreenWidth(), 84)];
+        [self addSubview:_filterBox];
+        _filterBox.backgroundColor = [UIColor whiteColor];
+        
+    }
+    return _filterBox;
+}
+
+- (UISearchBar *)searchBar
+{
+    if ( !_searchBar ) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(5, 0,
+                                                                       self.filterBox.width - 10, 44)];
+        
+        [self.filterBox addSubview:_searchBar];
+        _searchBar.searchBarStyle = UISearchBarStyleMinimal;
+        _searchBar.backgroundImage = AWImageFromColor([UIColor whiteColor]);
+        _searchBar.placeholder = @"输入任务名称搜索";
+        _searchBar.delegate = self;
+        
+        _searchBar.tintColor = MAIN_THEME_COLOR;
+    }
+    
+    return _searchBar;
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    [self.searchBar resignFirstResponder];
+    [self loadPlans];
+}
+
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    [self.searchBar setShowsCancelButton:YES animated:YES];
+    return YES;
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+    [self.searchBar resignFirstResponder];
+    self.searchBar.text = nil;
+    
+    [self loadPlans];
+}
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self searchBarResignAndChangeUI];
+    });
+}
+
+- (void)searchBarResignAndChangeUI
+{
+    [self.searchBar resignFirstResponder];
+    
+    [self changeSearchBarCancelBtnTitleColor:self.searchBar];
+}
+
+- (void)changeSearchBarCancelBtnTitleColor:(UIView *)view
+{
+    if ([view isKindOfClass:[UIButton class]]) {
+        UIButton *btn = (UIButton *)view;
+        btn.enabled = YES;
+        btn.userInteractionEnabled = YES;
+        // 设置取消按钮的颜色
+        [btn setTitleColor:MAIN_BG_COLOR forState:UIControlStateReserved];
+        [btn setTitleColor:MAIN_BG_COLOR forState:UIControlStateDisabled];
+    }else{
+        for (UIView *subView in view.subviews) {
+            [self changeSearchBarCancelBtnTitleColor:subView];
+        }
+    }
+}
+
+- (DMButton *)projButton
+{
+    if ( !_projButton ) {
+        _projButton = [[DMButton alloc] init];
+        [self.filterBox addSubview:_projButton];
+        
+        AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:@"全部"
+                                                             value:@"-1"
+                                                              type:FilterItemTypeNormal];
+        
+        self.projOptions = [@[] mutableCopy];
+        
+        [self.projOptions addObject:newItem];
+        
+        __weak typeof(self) me = self;
+        _projButton.selectBlock = ^(DMButton *sender) {
+            [me openPickerForData:me.projOptions sender:sender];
+        };
+        
+        _projButton.title = @"全部";
+        
+        _projButton.userData = [self.projOptions firstObject];
+    }
+    return _projButton;
+}
+
+- (DMButton *)levelButton
+{
+    if ( !_levelButton ) {
+        _levelButton = [[DMButton alloc] init];
+        [self.filterBox addSubview:_levelButton];
+        
+        __weak typeof(self) me = self;
+        NSArray *arr = @[
+                         @{
+                             @"label": @"全部",
+                             @"value": @"0",
+                             },
+                         @{
+                             @"label": @"一级",
+                             @"value": @"1",
+                             },
+                         @{
+                             @"label": @"二级",
+                             @"value": @"2",
+                             },
+                         @{
+                             @"label": @"三级",
+                             @"value": @"3",
+                             },
+                         @{
+                             @"label": @"里程碑",
+                             @"value": @"4",
+                             },
+                         ];
+        
+        NSMutableArray *temp = [@[] mutableCopy];
+        for (id item in arr) {
+            AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:item[@"label"]
+                                                                 value:item[@"value"]
+                                                                  type:FilterItemTypeNormal];
+            [temp addObject:newItem];
+        }
+        
+        _levelButton.selectBlock = ^(DMButton *sender) {
+            [me openPickerForData:temp sender:sender];
+        };
+        
+        _levelButton.title = @"全部";
+        _levelButton.userData = temp[0];
+    }
+    return _levelButton;
+}
+
+- (DMButton *)dateBtn
+{
+    if ( !_dateBtn ) {
+        _dateBtn = [[DMButton alloc] init];
+        [self.filterBox addSubview:_dateBtn];
+        
+        __weak typeof(self) me = self;
+        NSArray *arr = @[
+                         @{
+                             @"label": @"全部",
+                             @"value": @"0",
+                             },
+                         @{
+                             @"label": @"本月",
+                             @"value": @"1",
+                             },
+                         @{
+                             @"label": @"近两月",
+                             @"value": @"2",
+                             },
+                         @{
+                             @"label": @"近三月",
+                             @"value": @"3",
+                             },
+                         @{
+                             @"label": @"自定义",
+                             @"value": @"4",
+                             },
+                         ];
+        
+        NSMutableArray *temp = [@[] mutableCopy];
+        for (id item in arr) {
+            if ( [item[@"label"] isEqualToString:@"自定义"] ) {
+                AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:item[@"label"]
+                                                                     value:item[@"value"]
+                                                                      type:FilterItemTypeCustomDateRange];
+                [temp addObject:newItem];
+            } else {
+                AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:item[@"label"]
+                                                                     value:item[@"value"]
+                                                                      type:FilterItemTypeNormal];
+                [temp addObject:newItem];
+            }
+            
+        }
+        
+        _dateBtn.selectBlock = ^(DMButton *sender) {
+            [me openPickerForData:temp sender:sender];
+        };
+        
+        _dateBtn.title = @"本月";
+        _dateBtn.userData = temp[1];
+    }
+    return _dateBtn;
+}
+
+- (void)openPickerForData:(NSArray *)data sender:(DMButton *)sender
+{
+    [self.searchBar resignFirstResponder];
+    
+    [[self.superview viewWithTag:11022] removeFromSuperview];
+    
+    AWFilterView *filterView = [[AWFilterView alloc] init];
+    //    self.filterView = filterView;
+    filterView.tag = 11022;
+    
+    filterView.frame = CGRectMake(0, 41, self.width,
+                                  self.superview.height - 41);
+    
+    NSMutableArray *temp = [@[] mutableCopy];
+    NSMutableArray *temp2 = [@[] mutableCopy];
+    for (id item in data) {
+        
+        if ( [[item name] isEqualToString:@"自定义"] ) {
+            [temp2 addObject:item];
+        } else {
+            [temp addObject:item];
+        }
+    }
+    
+    //    if ( sender == self.roomBtn ) {
+    NSInteger index = [data indexOfObject:sender.userData];
+    if ( index == NSNotFound ) {
+        for (int i = 0; i<data.count; i++) {
+            AWFilterItem *item = data[i];
+            if ( [[[(AWFilterItem *)sender.userData value] description] isEqualToString:[item.value description]] ) {
+                index = i;
+                break;
+            }
+        }
+    }
+    
+    filterView.selectedIndex = index;
+    //    } else {
+    //        filterView.selectedIndex = 1;
+    //    }
+    
+    __weak typeof(self) me = self;
+    
+    filterView.filterItems = temp;
+    filterView.customFilterItems = temp2;
+    [filterView showInView:self.superview selectBlock:^(AWFilterView *sender1, AWFilterItem *selectedItem) {
+        NSLog(@"select item #########");
+        sender.userData = selectedItem;
+        sender.title = [selectedItem name];
+        
+        if ( selectedItem.itemType == FilterItemTypeNormal ) {
+            for (AWFilterItem *item in filterView.customFilterItems) {
+                item.userData = nil;
+            }
+        }
+        
+        [me loadPlans];
+    }];
 }
 
 - (UITableView *)tableView
@@ -168,97 +448,9 @@
         
         [_tableView removeBlankCells];
         
-        // 添加下拉刷新
-        __weak PlanListView *weakSelf = self;
-        [_tableView addPullToRefreshWithActionHandler:^{
-            __strong PlanListView *strongSelf = weakSelf;
-            if ( strongSelf ) {
-                [strongSelf loadPlans];
-            }
-        }];
-        
-        // 配置下拉刷新功能
-        HNRefreshView *stopView = [[HNRefreshView alloc] init];
-        stopView.text = @"下拉刷新";
-        
-        HNRefreshView *loadingView = [[HNRefreshView alloc] init];
-        loadingView.text = @"加载中...";
-        loadingView.animated = YES;
-        
-        HNRefreshView *triggerView = [[HNRefreshView alloc] init];
-        triggerView.text = @"松开刷新";
-        triggerView.animated = YES;
-        
-        [_tableView.pullToRefreshView setCustomView:triggerView forState:SVPullToRefreshStateTriggered];
-        [_tableView.pullToRefreshView setCustomView:loadingView forState:SVPullToRefreshStateLoading];
-        [_tableView.pullToRefreshView setCustomView:stopView forState:SVPullToRefreshStateStopped];
     }
     
     return _tableView;
-}
-
-- (NSDate *)currentDate
-{
-    if ( !_currentDate ) {
-        _currentDate = [NSDate date];
-    }
-    return _currentDate;
-}
-
-- (DateSelectControl *)dateSelectControl
-{
-    if ( !_dateSelectControl ) {
-        
-        UIView *blankView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.width, 60)];
-        blankView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        [self addSubview:blankView];
-        blankView.backgroundColor = [UIColor whiteColor];
-        
-        // 添加日期选择控件
-        _dateSelectControl = [[DateSelectControl alloc] init];
-        
-        NSDate *now = [NSDate date];
-        
-//        NSCalendar *calendar = [NSCalendar autoupdatingCurrentCalendar];
-//        NSDate *tomorrow = [calendar dateByAddingUnit:NSCalendarUnitDay value:1
-//                                               toDate:now
-//                                              options:0];
-        
-//        _dateSelectControl.minimumDate = now;
-        _dateSelectControl.maximumDate = now;
-        
-        __weak typeof(self) weakSelf = self;
-        _dateSelectControl.currentDateDidChangeBlock = ^(DateSelectControl *sender) {
-            NSLog(@"date: %@", sender.currentDate);
-            weakSelf.currentDate = sender.currentDate;
-            
-            [weakSelf loadPlans];
-        };
-        _dateSelectControl.openDatePickerBlock = ^(DateSelectControl *sender) {
-            [weakSelf openDatePicker];
-        };
-        _dateSelectControl.backgroundColor = [UIColor whiteColor];
-        
-        _dateSelectControl.controlMode = DateControlModeYearMonth;
-        
-        _dateSelectControl.currentDate = now;
-        [self addSubview:_dateSelectControl];
-        
-    }
-    return _dateSelectControl;
-}
-
-- (void)openDatePicker
-{
-    YearMonthPickerView *pickerView = [[YearMonthPickerView alloc] init];
-    pickerView.currentDate = self.currentDate;
-    pickerView.doneCallback = ^(YearMonthPickerView *sender) {
-        self.currentDate = sender.currentDate;
-        self.dateSelectControl.currentDate = sender.currentDate;
-        
-        [self loadPlans];
-    };
-    [pickerView showInView:self.superview.superview.superview];
 }
 
 @end

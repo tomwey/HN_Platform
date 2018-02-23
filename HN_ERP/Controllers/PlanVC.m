@@ -40,10 +40,10 @@
     self.tabStrip.dataSource = self;
     self.tabStrip.delegate   = self;
     [self.contentView addSubview:self.tabStrip];
-    self.tabStrip.backgroundColor = AWColorFromRGB(247, 247, 247);
+    self.tabStrip.backgroundColor = MAIN_THEME_COLOR;//AWColorFromRGB(247, 247, 247);
     
-    self.tabStrip.titleAttributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: AWColorFromRGB(137,137,137) };
-    self.tabStrip.selectedTitleAttributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: MAIN_THEME_COLOR };
+    self.tabStrip.titleAttributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: [UIColor whiteColor] };
+    self.tabStrip.selectedTitleAttributes = @{ NSFontAttributeName: [UIFont systemFontOfSize:14], NSForegroundColorAttributeName: [UIColor whiteColor] };
     
     self.swipeView = [[SwipeView alloc] initWithFrame:
                       CGRectMake(0, self.tabStrip.bottom,
@@ -65,7 +65,7 @@
     // 加载第一页
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         //[self doSearch:@""];
-        PlanProjectView *listView = (PlanProjectView *)[self swipeSubviewForIndex:0];
+        PlanListView *listView = (PlanListView *)[self swipeSubviewForIndex:0];
         listView.userData = @"0";
 //        listView.didSelectBlock = ^(PlanListView *sender, id selectedItem) {
 //            UIViewController *vc =
@@ -142,9 +142,9 @@
 {
     static const int viewCount = 2;
     static NSString * viewNames[viewCount] = {
-                                      //@"PlanListView",
+                                      @"PlanListView",
                                       @"PlanProjectView",
-                                      @"PlanProjectView"
+//                                      @"PlanProjectView"
                                     };
     
     if  ( index >= viewCount ) {

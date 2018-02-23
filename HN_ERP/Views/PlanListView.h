@@ -16,4 +16,6 @@
 
 - (void)startLoading;
 
+- (void)closeFilterView;
+
 @end
