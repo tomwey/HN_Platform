@@ -14,7 +14,7 @@
 
 @interface BIVC ()
 
-@property (nonatomic, strong) SelectButton *areaButton;
+@property (nonatomic, strong) DMButton *areaButton;
 @property (nonatomic, strong) HNTimeSelect *timeSelect;
 
 @property (nonatomic, strong) NSArray *areaData;
@@ -51,15 +51,15 @@
         [me startLoadData];
     };
     
-    self.areaButton.position = CGPointMake(self.contentView.width - 10 - self.areaButton.width, 10);
+    self.areaButton.position = CGPointMake(self.contentView.width - 10 - self.areaButton.width, 2);
     
-    self.timeSelect.frame = CGRectMake(0, 0, self.contentView.width - 20 - self.areaButton.width - 10, 34);
-    self.timeSelect.position = CGPointMake(10, 10);
+    self.timeSelect.frame = CGRectMake(0, 0, self.contentView.width - 20 - self.areaButton.width, 40);
+    self.timeSelect.position = CGPointMake(10, self.areaButton.top);
     
     AWHairlineView *line = [AWHairlineView horizontalLineWithWidth:self.contentView.width
                                                              color:IOS_DEFAULT_CELL_SEPARATOR_LINE_COLOR
                                                             inView:self.contentView];
-    line.position = CGPointMake(0, self.timeSelect.bottom + 10);
+    line.position = CGPointMake(0, self.timeSelect.bottom + 2);
     
     // 图表滚动视图
     self.chartScrollView.frame = CGRectMake(0, line.bottom,
@@ -67,29 +67,6 @@
                                             self.contentView.height - line.bottom);
     
     [self loadData];
-}
-
-- (NSInteger)currentQuaterIndexForData:(NSArray *)yearData
-{
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSDateComponents *df = [calendar components:NSCalendarUnitMonth fromDate:[NSDate date]];
-    NSInteger month = df.month;
-    
-    for (int i=1; i<yearData.count; i++) { // 第一个数据是全年，不用查询
-        id dict = yearData[i];
-        NSArray *months = dict[@"months"];
-        if ( [months containsObject:@(month)] ) {
-            return i;
-        }
-    }
-    
-    return NSNotFound;
-}
-
-- (NSDateComponents *)dateComponents
-{
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    return [calendar components:NSCalendarUnitMonth | NSCalendarUnitWeekOfMonth fromDate:[NSDate date]];
 }
 
 - (void)loadData
@@ -294,16 +271,20 @@
     };
 }
 
-- (SelectButton *)areaButton
+- (DMButton *)areaButton
 {
     if (!_areaButton) {
-        _areaButton = [[SelectButton alloc] init];
+        _areaButton = [[DMButton alloc] init];
         [self.contentView addSubview:_areaButton];
+        _areaButton.frame = CGRectMake(0, 0, 90 / 320.0 * AWFullScreenWidth(), 40);
         
         __weak typeof(self) me = self;
-        _areaButton.clickBlock = ^(SelectButton *sender) {
+        _areaButton.selectBlock = ^(DMButton *sender) {
             [me selectArea];
         };
+//        _areaButton.clickBlock = ^(SelectButton *sender) {
+//            [me selectArea];
+//        };
     }
     return _areaButton;
 //    if ( !_areaButton ) {

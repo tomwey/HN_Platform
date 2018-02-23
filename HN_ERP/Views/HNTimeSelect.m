@@ -12,9 +12,9 @@
 
 @interface HNTimeSelect ()
 
-@property (nonatomic, strong) SelectButton *quarterButton;
-@property (nonatomic, strong) SelectButton *monthButton;
-@property (nonatomic, strong) SelectButton *weekButton;
+@property (nonatomic, strong) DMButton *quarterButton;
+@property (nonatomic, strong) DMButton *monthButton;
+@property (nonatomic, strong) DMButton *weekButton;
 
 @property (nonatomic, strong) NSArray *yearData;
 
@@ -80,8 +80,8 @@
 {
     [super layoutSubviews];
     
-    CGFloat padding = 5;
-    CGFloat width   = (self.width - padding * 2) / 3.0;
+    CGFloat padding = 0;
+    CGFloat width   = (self.width) / 3.0;
     
     self.quarterButton.frame =
     self.monthButton.frame   =
@@ -331,7 +331,7 @@
     return 0;
 }
 
-- (void)openPickerForData:(NSArray *)data forButton:(SelectButton *)sender
+- (void)openPickerForData:(NSArray *)data forButton:(DMButton *)sender
 {
     UIView *superView = self.containerView ?: self.superview;
     
@@ -389,44 +389,53 @@
     };
 }
 
-- (SelectButton *)quarterButton
+- (DMButton *)quarterButton
 {
     if ( !_quarterButton ) {
-        _quarterButton = [[SelectButton alloc] init];
+        _quarterButton = [[DMButton alloc] init];
         [self addSubview:_quarterButton];
         
         __weak typeof(self) me = self;
-        _quarterButton.clickBlock = ^(SelectButton *sender) {
+//        _quarterButton.clickBlock = ^(SelectButton *sender) {
+//            [me openPickerForData:me.quarterData forButton:sender];
+//        };
+        _quarterButton.selectBlock = ^(DMButton *sender) {
             [me openPickerForData:me.quarterData forButton:sender];
         };
     }
     return _quarterButton;
 }
 
-- (SelectButton *)monthButton
+- (DMButton *)monthButton
 {
     if ( !_monthButton ) {
-        _monthButton = [[SelectButton alloc] init];
+        _monthButton = [[DMButton alloc] init];
         [self addSubview:_monthButton];
         
         __weak typeof(self) me = self;
-        _monthButton.clickBlock = ^(SelectButton *sender) {
+        _monthButton.selectBlock = ^(DMButton *sender) {
             [me openPickerForData:me.monthData forButton:sender];
         };
+//        _monthButton.clickBlock = ^(SelectButton *sender) {
+//            [me openPickerForData:me.monthData forButton:sender];
+//        };
     }
     return _monthButton;
 }
 
-- (SelectButton *)weekButton
+- (DMButton *)weekButton
 {
     if ( !_weekButton ) {
-        _weekButton = [[SelectButton alloc] init];
+        _weekButton = [[DMButton alloc] init];
         [self addSubview:_weekButton];
         
         __weak typeof(self) me = self;
-        _weekButton.clickBlock = ^(SelectButton *sender) {
+        _weekButton.selectBlock = ^(DMButton *sender) {
             [me openPickerForData:me.weekData forButton:sender];
         };
+//        _weekButton.clickBlock = ^(SelectButton *sender) {
+//            [me openPickerForData:me.weekData forButton:sender];
+//        };
     }
     return _weekButton;
 }
