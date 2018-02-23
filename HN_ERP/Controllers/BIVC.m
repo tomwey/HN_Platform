@@ -51,7 +51,7 @@
         [me startLoadData];
     };
     
-    self.areaButton.position = CGPointMake(self.contentView.width - 10 - self.areaButton.width, 2);
+    self.areaButton.position = CGPointMake(self.contentView.width - 10 - self.areaButton.width, 5);
     
     self.timeSelect.frame = CGRectMake(0, 0, self.contentView.width - 20 - self.areaButton.width, 40);
     self.timeSelect.position = CGPointMake(10, self.areaButton.top);
@@ -59,7 +59,7 @@
     AWHairlineView *line = [AWHairlineView horizontalLineWithWidth:self.contentView.width
                                                              color:IOS_DEFAULT_CELL_SEPARATOR_LINE_COLOR
                                                             inView:self.contentView];
-    line.position = CGPointMake(0, self.timeSelect.bottom + 2);
+    line.position = CGPointMake(0, self.timeSelect.bottom + self.areaButton.top);
     
     // 图表滚动视图
     self.chartScrollView.frame = CGRectMake(0, line.bottom,
