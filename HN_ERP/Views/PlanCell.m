@@ -44,26 +44,25 @@
     [super layoutSubviews];
     
     self.contentContainer.frame = self.bounds;
-    self.contentContainer.top     = 10;
-    self.contentContainer.height -= 10;
+//    self.contentContainer.top     = 10;
+//    self.contentContainer.height -= 10;
     
     CGFloat titleHeight = 60.0f, summaryHeight = 30.0f;
     
-    CGFloat padding = self.contentContainer.height / 2.0 -
-                        ( titleHeight + summaryHeight ) / 2.0;
-    
-    self.dateLabel.center = CGPointMake(10 + self.dateLabel.width / 2, self.contentContainer.height / 2);
-    
-    self.titleLabel.frame = CGRectMake(self.dateLabel.right + 10,
-                                       padding,
-                                       self.contentContainer.width - self.dateLabel.width - 10 - 60 - 30,
+    self.titleLabel.frame = CGRectMake(15, 10,
+                                       self.contentContainer.width - self.leftTimeLabel.width - 30,
                                        titleHeight);
+    
+//    CGFloat padding = self.contentContainer.height / 2.0 -
+//                        ( titleHeight + summaryHeight ) / 2.0;
     
     self.summaryLabel.frame = self.titleLabel.frame;
     self.summaryLabel.height = summaryHeight;
-    self.summaryLabel.top = self.contentContainer.height - summaryHeight - padding - 3;
+    self.summaryLabel.top = self.titleLabel.bottom - 5;//self.contentContainer.height - summaryHeight - 5;
     
-    self.leftTimeLabel.center = CGPointMake(self.contentContainer.width - self.leftTimeLabel.width / 2 - 10, self.contentContainer.height / 2 - 5);
+    self.dateLabel.frame = self.summaryLabel.frame;
+    
+    self.leftTimeLabel.center = CGPointMake(self.contentContainer.width - self.leftTimeLabel.width / 2 - 10, /*self.contentContainer.height / 2 - 5*/self.titleLabel.midY);
     
     self.stateLabel.center = CGPointMake(self.leftTimeLabel.midX,
                                          self.summaryLabel.midY);
@@ -111,22 +110,28 @@
     NSDateFormatter *df1 = [[NSDateFormatter alloc] init];
     df1.dateFormat = @"yyyy-MM-dd";
     NSDate *eDate = [df1 dateFromString:endDateStr];
-    
+//
     NSDateFormatter *df2 = [[NSDateFormatter alloc] init];
     df2.dateFormat = @"d日\nyyyy年M月";
     NSString *planEndDateStr = [df2 stringFromDate:eDate];
-    
+//
     NSMutableAttributedString *dateString = [[NSMutableAttributedString alloc] initWithString:planEndDateStr];
     NSRange range = [dateString.string rangeOfString:@"日"];
-    [dateString addAttributes:@{ NSFontAttributeName: AWSystemFontWithSize(20, NO) } range:NSMakeRange(0, range.location)];
-    self.dateLabel.attributedText = dateString;
+//    [dateString addAttributes:@{ NSFontAttributeName: AWSystemFontWithSize(20, NO) } range:NSMakeRange(0, range.location)];
+//    self.dateLabel.attributedText = dateString;
+    self.dateLabel.text = [NSString stringWithFormat:@"%@ 至 %@", data[@"planbegindate"], data[@"planoverdate"]];
     
     // 设置计划名称
     self.titleLabel.text = data[@"itemname"];
     
     // ● 设置摘要
-    self.summaryLabel.text = [NSString stringWithFormat:@"%@ %@",
-                              data[@"project_name"], data[@"plangrade"]];
+    self.summaryLabel.text = [NSString stringWithFormat:@"%@  %@",
+                              data[@"projecttermname"], data[@"plangrade"]];
+    
+    NSString *nowStr = [df1 stringFromDate:[NSDate date]];
+    if ( [nowStr compare:data[@"planbegindate"] options:NSNumericSearch] == NSOrderedAscending ) {
+        self.state = 2;
+    }
     
     // 设置倒计时
     BOOL hasCQ = NO; // 是否超期完成
@@ -241,7 +246,7 @@
                            @"label": @"确认中",
                            @"color": @"#E8A02A",
                            },@{
-                           @"label": @"调整中",
+                           @"label": @"未开始",
                            @"color": @"#53B2DA",
                            },@{
                            @"label": @"已超期",
@@ -269,11 +274,11 @@
     if ( !_dateLabel ) {
         _dateLabel = AWCreateLabel(CGRectMake(0, 0, 60, 60),
                                    nil,
-                                   NSTextAlignmentCenter,
-                                   AWSystemFontWithSize(10, NO),
+                                   NSTextAlignmentRight,
+                                   AWSystemFontWithSize(11, NO),
                                    AWColorFromRGB(58, 58, 58));
         [self.contentContainer addSubview:_dateLabel];
-        _dateLabel.numberOfLines = 2;
+//        _dateLabel.numberOfLines = 2;
     }
     return _dateLabel;
 }
@@ -298,7 +303,7 @@
         _summaryLabel = AWCreateLabel(CGRectZero,
                                       nil,
                                       NSTextAlignmentLeft,
-                                      [UIFont systemFontOfSize:13],
+                                      [UIFont systemFontOfSize:12],
                                       AWColorFromRGB(137, 137, 137));
         [self.contentContainer addSubview:_summaryLabel];
     }
@@ -315,9 +320,9 @@
                                        self.dateLabel.textColor);
         [self.contentContainer addSubview:_leftTimeLabel];
         _leftTimeLabel.numberOfLines = 2;
-        _leftTimeLabel.cornerRadius = _leftTimeLabel.height / 2;
-        _leftTimeLabel.layer.borderColor = AWColorFromRGB(239, 239, 239).CGColor;
-        _leftTimeLabel.layer.borderWidth = 0.5;
+//        _leftTimeLabel.cornerRadius = _leftTimeLabel.height / 2;
+//        _leftTimeLabel.layer.borderColor = AWColorFromRGB(239, 239, 239).CGColor;
+//        _leftTimeLabel.layer.borderWidth = 0.5;
     }
     return _leftTimeLabel;
 }

@@ -98,11 +98,14 @@
     [[self apiServiceWithName:@"APIService"]
      POST:nil params:@{
                        @"dotype": @"GetData",
-                       @"funname": @"工作计划查询APP",
+                       @"funname": @"平台查询总控计划列表APP",
                        @"param1": manID,
-                       @"param2": @"",
-                       @"param3": @"",
-                       @"param4": @"",
+                       @"param2": @"0",
+                       @"param3": @"0",
+                       @"param4": @"-1",
+                       @"param5": @"",
+                       @"param6": @"",
+                       @"param7": @"",
                        } completion:^(id result, NSError *error) {
                            __strong PlanListView *strongSelf = weakSelf;
                            if ( strongSelf ) {
@@ -436,10 +439,10 @@
         
         _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
         UIViewAutoresizingFlexibleHeight;
-        _tableView.separatorColor = [UIColor clearColor];
+//        _tableView.separatorColor = [UIColor clearColor];
         _tableView.backgroundColor = [UIColor clearColor];
         
-        _tableView.rowHeight = 120;
+        _tableView.rowHeight = 110;
         
         _tableView.dataSource = self.dataSource;
         _tableView.delegate   = self;
