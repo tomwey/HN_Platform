@@ -57,6 +57,13 @@ static CGFloat const kFluidItemSpacing     = 10.0;
 {
     self.frame = CGRectMake(0, 0, CGRectGetWidth([[UIScreen mainScreen] bounds]), 44 + /*[self statusBarHeight]*/ 20);
     
+    if ( CGRectGetHeight([[UIScreen mainScreen] bounds]) == 812 ) {
+        // iPhone X
+        self.frame = CGRectMake(0, 0, CGRectGetWidth([[UIScreen mainScreen] bounds]), 44 + /*[self statusBarHeight]*/ 20 + 24);
+    } else {
+        
+    }
+    
     self.backgroundView = [[UIImageView alloc] init];
     self.backgroundView.frame = self.bounds;
     [self addSubview:self.backgroundView];
@@ -87,12 +94,12 @@ static CGFloat const kFluidItemSpacing     = 10.0;
     
     if ( self.leftItem ) {
         self.inLeftItem.center = CGPointMake(self.leftMarginOfLeftItem + CGRectGetWidth(self.inLeftItem.bounds) / 2,
-                                             CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+                                             22 + [self statusBarHeight]);
     }
     
     if ( self.rightItem ) {
         self.inRightItem.center = CGPointMake(CGRectGetWidth(self.bounds) - self.rightMarginOfRightItem - CGRectGetWidth(self.inRightItem.bounds) / 2,
-                                              CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+                                              22 + [self statusBarHeight]);
     }
     
     [self layoutFluidItems];
@@ -318,7 +325,7 @@ static CGFloat const kFluidItemSpacing     = 10.0;
     
     for (UIView *item in self.leftFluidItems) {
         item.center = CGPointMake(leftOffsetX + CGRectGetWidth(item.frame) / 2,
-                                  CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+                                  22 + [self statusBarHeight]);
         leftOffsetX = CGRectGetMaxX(item.frame) + self.marginOfFluidItem;
     }
     
@@ -334,7 +341,7 @@ static CGFloat const kFluidItemSpacing     = 10.0;
     for (NSInteger i = count - 1; i >= 0; i--) {
         UIView* item = self.rightFluidItems[i];
         item.center = CGPointMake(rightOffsetX - CGRectGetWidth(item.frame) / 2,
-                                  CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+                                  22 + [self statusBarHeight]);
         rightOffsetX = CGRectGetMinX(item.frame) - self.marginOfFluidItem;
     }
     
@@ -344,14 +351,14 @@ static CGFloat const kFluidItemSpacing     = 10.0;
     
     if ( self.inTitleLabel ) {
         self.inTitleLabel.frame  = CGRectMake(0, 0, width, 44);
-        self.inTitleLabel.center = CGPointMake(CGRectGetWidth(self.bounds) / 2 + 5,
-                                               CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+        self.inTitleLabel.center = CGPointMake(CGRectGetWidth(self.bounds) / 2,
+                                               22 + [self statusBarHeight]);
     }
     
     // 布局标题视图
     if ( self.inTitleView ) {
         self.inTitleView.center = CGPointMake(CGRectGetWidth(self.bounds) / 2,
-                                              CGRectGetHeight(self.bounds) / 2 + [self statusBarHeight]/2);
+                                              22 + [self statusBarHeight]);
     }
 }
 
@@ -369,7 +376,12 @@ static CGFloat const kContentViewTag  = 1011014;
         self.navigationController.navigationBarHidden = YES;
         
         navBar = [[CustomNavBar alloc] init];
-        navBar.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 64);
+        
+        if (CGRectGetHeight([[UIScreen mainScreen] bounds]) == 812) {
+            navBar.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 88);
+        } else {
+            navBar.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 64);
+        }
         
         // 设置默认属性
         navBar.backgroundColor = [UIColor whiteColor];
@@ -387,11 +399,17 @@ static CGFloat const kContentViewTag  = 1011014;
         [self.view addSubview:navBar];
         
         // 创建一个contentView
+        CGFloat height = CGRectGetHeight(self.view.bounds) - CGRectGetHeight(navBar.frame);
+        
+        if (CGRectGetHeight([[UIScreen mainScreen] bounds]) == 812) {
+            height -= 34;
+        }
+        
         UIView* contentView = [[UIView alloc] initWithFrame:
                                CGRectMake(0,
                                           CGRectGetHeight(navBar.frame),
                                           CGRectGetWidth(self.view.bounds),
-                                          CGRectGetHeight(self.view.bounds) - CGRectGetHeight(navBar.frame))];
+                                          height)];
         contentView.tag = kContentViewTag;
         [self.view addSubview:contentView];
         

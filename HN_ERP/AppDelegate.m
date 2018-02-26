@@ -32,8 +32,8 @@
     [[UITabBar appearance] setTintColor:MAIN_THEME_COLOR];
 //    [[UITabBarItem appearance] setTitleTextAttributes:@{ NSForegroundColorAttributeName: MAIN_THEME_COLOR } forState:UIControlStateSelected];
     
-    BOOL canShow = [GuideVC canShowGuide];
-    
+    BOOL canShow = NO;//[GuideVC canShowGuide];
+//
     [self showGuide:canShow];
     
     [self.window makeKeyAndVisible];
