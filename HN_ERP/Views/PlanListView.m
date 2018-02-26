@@ -22,11 +22,18 @@
 @property (nonatomic, strong) DMButton *projButton;
 
 @property (nonatomic, strong) NSMutableArray *projOptions;
+@property (nonatomic, strong) NSMutableArray *levelOptions;
 
 @property (nonatomic, strong) DMButton *levelButton;
 @property (nonatomic, strong) DMButton *dateBtn;
+@property (nonatomic, strong) DMButton *stateBtn;
 
 @property (nonatomic, strong) UISearchBar *searchBar;
+
+@property (nonatomic, assign) NSInteger counter;
+
+@property (nonatomic, strong) NSError *dataError;
+@property (nonatomic, strong) id dataResult;
 
 @end
 
@@ -56,10 +63,12 @@
     
     self.dateBtn.frame =
     self.projButton.frame =
-    self.levelButton.frame = CGRectMake(0, 0, self.width / 3.0, 40);
+    self.stateBtn.frame   =
+    self.levelButton.frame = CGRectMake(0, 0, self.width / 4.0, 40);
     
     self.levelButton.left = self.projButton.right;
     self.dateBtn.left = self.levelButton.right;
+    self.stateBtn.left = self.dateBtn.right;
     
     self.searchBar.position = CGPointMake(5, self.projButton.bottom);
     
@@ -84,9 +93,27 @@
     
     self.loading = YES;
     
-    [self.tableView removeErrorOrEmptyTips];
+//    [self.tableView removeErrorOrEmptyTips];
     
     [HNProgressHUDHelper showHUDAddedTo:self animated:YES];
+    
+    AWFilterItem *item = (AWFilterItem *)self.dateBtn.userData;
+    NSString *startDate = @"";
+    NSString *endDate   = @"";
+    
+    if ( [item.value integerValue] == 0 ) { // 自定义日期
+        if ( item.userData[@"startDate"] ) {
+            startDate = item.userData[@"startDate"];
+        } else {
+            startDate = @"";
+        }
+        
+        if ( item.userData[@"endDate"] ) {
+            endDate = item.userData[@"endDate"];
+        } else {
+            endDate = @"";
+        }
+    }
     
     id user = [[UserService sharedInstance] currentUser];
     NSString *manID = [user[@"man_id"] description];
@@ -100,39 +127,192 @@
                        @"dotype": @"GetData",
                        @"funname": @"平台查询总控计划列表APP",
                        @"param1": manID,
-                       @"param2": @"0",
-                       @"param3": @"0",
-                       @"param4": @"-1",
-                       @"param5": @"",
-                       @"param6": @"",
-                       @"param7": @"",
+                       @"param2": [[(AWFilterItem *)self.projButton.userData value] ?: @"0" description],
+                       @"param3": [[(AWFilterItem *)self.levelButton.userData value] ?: @"0" description],
+                       @"param4": [[(AWFilterItem *)self.dateBtn.userData value] ?: @"0" description],
+                       @"param5": startDate,
+                       @"param6": endDate,
+                       @"param7": [self.searchBar.text trim] ?: @"",
                        } completion:^(id result, NSError *error) {
                            __strong PlanListView *strongSelf = weakSelf;
                            if ( strongSelf ) {
                                [strongSelf handleResult:result error:error];
                            }
                        }];
+    
+    [[self apiServiceWithName:@"APIService"]
+     POST:nil
+     params:@{
+              @"dotype": @"GetData",
+              @"funname": @"平台获取计划级别列表APP"
+              } completion:^(id result, NSError *error) {
+                  [weakSelf handleResult2:result error:error];
+              }];
+    
+    [[self apiServiceWithName:@"APIService"]
+     POST:nil
+     params:@{
+              @"dotype": @"GetData",
+              @"funname": @"平台通用查询项目列表APP",
+              @"param1": @"1",
+              @"param2": manID
+              } completion:^(id result, NSError *error) {
+                  [weakSelf handleResult3:result error:error];
+              }];
+}
+
+// 处理加载计划级别
+- (void)handleResult2:(id)result error:(NSError *)error
+{
+    if ([result[@"rowcount"] integerValue] > 0) {
+        
+        AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:@"全部"
+                                                             value:@"0"
+                                                              type:FilterItemTypeNormal];
+        
+        self.levelOptions = [@[] mutableCopy];
+        
+        [self.levelOptions addObject:newItem];
+        
+        NSArray *data = result[@"data"];
+        for (id item in data) {
+            AWFilterItem *it = [[AWFilterItem alloc] initWithName:item[@"plangrade"]
+                                                            value:item[@"plangradeid"]
+                                                             type:FilterItemTypeNormal];
+            [self.levelOptions addObject:it];
+        }
+    }
+    [self loadDone];
+}
+
+// 处理加载项目
+- (void)handleResult3:(id)result error:(NSError *)error
+{
+    if ([result[@"rowcount"] integerValue] > 0) {
+        
+        AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:@"全部"
+                                                             value:@"0"
+                                                              type:FilterItemTypeNormal];
+        
+        self.projOptions = [@[] mutableCopy];
+        
+        [self.projOptions addObject:newItem];
+        
+        NSArray *data = result[@"data"];
+        for (id item in data) {
+            AWFilterItem *it = [[AWFilterItem alloc] initWithName:item[@"project_name"]
+                                                            value:item[@"project_id"]
+                                                             type:FilterItemTypeNormal];
+            [self.projOptions addObject:it];
+        }
+    }
+    [self loadDone];
 }
 
 - (void)handleResult:(id)result error:(NSError *)error
 {
-    self.loading = NO;
+//    self.loading = NO;
     
-    [HNProgressHUDHelper hideHUDForView:self animated:YES];
+//    [HNProgressHUDHelper hideHUDForView:self animated:YES];
     
-    [self.tableView.pullToRefreshView stopAnimating];
+//    [self.tableView.pullToRefreshView stopAnimating];
     
-    if ( error ) {
-        [self.tableView showErrorOrEmptyMessage:error.domain reloadDelegate:nil];
+//    if ( error ) {
+//        [self.tableView showErrorOrEmptyMessage:error.domain reloadDelegate:nil];
+//    } else {
+//        NSInteger count = [result[@"rowcount"] integerValue];
+//        if ( count == 0 ) {
+//            [self.tableView showErrorOrEmptyMessage:LOADING_REFRESH_NO_RESULT reloadDelegate:nil];
+//            self.dataSource.dataSource = nil;
+//        } else {
+//
+//            self.dataSource.dataSource = result[@"data"];
+//        }
+//        [self.tableView reloadData];
+//    }
+//
+//    [self.superview bringSubviewToFront:[self.superview viewWithTag:11022]];
+    
+    self.dataResult = result;
+    self.dataError = error;
+    
+    [self loadDone];
+}
+
+- (void)loadDone
+{
+    if (++self.counter == 3) {
+        self.counter = 0;
+        
+        self.loading = NO;
+        
+        [HNProgressHUDHelper hideHUDForView:self animated:YES];
+        
+        // 处理并显示数据
+        [self handleAndShowData];
+    }
+}
+
+- (void)handleAndShowData
+{
+    if ( self.dataError ) {
+        [self.tableView showErrorOrEmptyMessage:self.dataError.domain reloadDelegate:nil];
     } else {
-        NSInteger count = [result[@"rowcount"] integerValue];
+        NSInteger count = [self.dataResult[@"rowcount"] integerValue];
         if ( count == 0 ) {
             [self.tableView showErrorOrEmptyMessage:LOADING_REFRESH_NO_RESULT reloadDelegate:nil];
             self.dataSource.dataSource = nil;
-        } else {            
+        } else {
+            AWFilterItem *item = self.stateBtn.userData;
             
-            self.dataSource.dataSource = result[@"data"];
+            if ([item.name isEqualToString:@"全部"]) {
+                self.dataSource.dataSource = self.dataResult[@"data"];
+            } else {
+                NSMutableArray *arr = [@[] mutableCopy];
+                NSDateFormatter *df = [[NSDateFormatter alloc] init];
+                df.dateFormat = @"yyyy-MM-dd";
+                
+                for (id obj in self.dataResult[@"data"]) {
+                    BOOL isCompleted = [obj[@"isover"] boolValue];
+                    if ( isCompleted ) {
+                        if ([item.name isEqualToString:@"已完成"]) {
+                            [arr addObject:obj];
+                        }
+                    } else {
+                        NSString *nowStr = [df stringFromDate:[NSDate date]];
+                        
+                        NSString *beginDate = HNStringFromObject(obj[@"planbegindate"], @"");
+                        NSString *endDate   = HNStringFromObject(obj[@"planoverdate"], @"");
+                        
+                        if ([nowStr compare:beginDate options:NSNumericSearch] == NSOrderedAscending) {
+                            // 未开始
+                            if ([item.name isEqualToString:@"未开始"]) {
+                                [arr addObject:obj];
+                            }
+                        } else if ([nowStr compare:endDate options:NSNumericSearch] == NSOrderedDescending) {
+                            // 已超期
+                            if ([item.name isEqualToString:@"已超期"]) {
+                                [arr addObject:obj];
+                            }
+                        } else {
+                            // 进行中
+                            if ([item.name isEqualToString:@"进行中"]) {
+                                [arr addObject:obj];
+                            }
+                        }
+                    }
+                }
+                
+                if (arr.count == 0) {
+                    [self.tableView showErrorOrEmptyMessage:LOADING_REFRESH_NO_RESULT reloadDelegate:nil];
+                    self.dataSource.dataSource = nil;
+                } else {
+                    [self.tableView removeErrorOrEmptyTips];
+                    self.dataSource.dataSource = arr;
+                }
+            }
         }
+        
         [self.tableView reloadData];
     }
     
@@ -208,6 +388,8 @@
     [self.searchBar resignFirstResponder];
     self.searchBar.text = nil;
     
+    [self.searchBar setShowsCancelButton:NO animated:YES];
+    
     [self loadPlans];
 }
 
@@ -248,7 +430,7 @@
         [self.filterBox addSubview:_projButton];
         
         AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:@"全部"
-                                                             value:@"-1"
+                                                             value:@"0"
                                                               type:FilterItemTypeNormal];
         
         self.projOptions = [@[] mutableCopy];
@@ -274,43 +456,20 @@
         [self.filterBox addSubview:_levelButton];
         
         __weak typeof(self) me = self;
-        NSArray *arr = @[
-                         @{
-                             @"label": @"全部",
-                             @"value": @"0",
-                             },
-                         @{
-                             @"label": @"一级",
-                             @"value": @"1",
-                             },
-                         @{
-                             @"label": @"二级",
-                             @"value": @"2",
-                             },
-                         @{
-                             @"label": @"三级",
-                             @"value": @"3",
-                             },
-                         @{
-                             @"label": @"里程碑",
-                             @"value": @"4",
-                             },
-                         ];
+        AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:@"全部"
+                                                             value:@"0"
+                                                              type:FilterItemTypeNormal];
         
-        NSMutableArray *temp = [@[] mutableCopy];
-        for (id item in arr) {
-            AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:item[@"label"]
-                                                                 value:item[@"value"]
-                                                                  type:FilterItemTypeNormal];
-            [temp addObject:newItem];
-        }
+        self.levelOptions = [@[] mutableCopy];
+        
+        [self.levelOptions addObject:newItem];
         
         _levelButton.selectBlock = ^(DMButton *sender) {
-            [me openPickerForData:temp sender:sender];
+            [me openPickerForData:me.levelOptions sender:sender];
         };
         
         _levelButton.title = @"全部";
-        _levelButton.userData = temp[0];
+        _levelButton.userData = self.levelOptions[0];
     }
     return _levelButton;
 }
@@ -325,7 +484,7 @@
         NSArray *arr = @[
                          @{
                              @"label": @"全部",
-                             @"value": @"0",
+                             @"value": @"-1",
                              },
                          @{
                              @"label": @"本月",
@@ -341,7 +500,7 @@
                              },
                          @{
                              @"label": @"自定义",
-                             @"value": @"4",
+                             @"value": @"0",
                              },
                          ];
         
@@ -369,6 +528,56 @@
         _dateBtn.userData = temp[1];
     }
     return _dateBtn;
+}
+
+- (DMButton *)stateBtn
+{
+    if ( !_stateBtn ) {
+        _stateBtn = [[DMButton alloc] init];
+        [self.filterBox addSubview:_stateBtn];
+        
+        __weak typeof(self) me = self;
+        NSArray *arr = @[
+                         @{
+                             @"label": @"全部",
+                             @"value": @"0",
+                             },
+                         @{
+                             @"label": @"未开始",
+                             @"value": @"1",
+                             },
+                         @{
+                             @"label": @"进行中",
+                             @"value": @"2",
+                             },
+                         @{
+                             @"label": @"已完成",
+                             @"value": @"3",
+                             },
+                         @{
+                             @"label": @"已超期",
+                             @"value": @"4",
+                             },
+                         ];
+        
+        NSMutableArray *temp = [@[] mutableCopy];
+        for (id item in arr) {
+
+                AWFilterItem *newItem = [[AWFilterItem alloc] initWithName:item[@"label"]
+                                                                     value:item[@"value"]
+                                                                      type:FilterItemTypeNormal];
+                [temp addObject:newItem];
+        }
+        
+        _stateBtn.selectBlock = ^(DMButton *sender) {
+            [me openPickerForData:temp sender:sender];
+        };
+        
+        _stateBtn.title = @"全部";
+        _stateBtn.userData = temp[0];
+    }
+    
+    return _stateBtn;
 }
 
 - (void)openPickerForData:(NSArray *)data sender:(DMButton *)sender
