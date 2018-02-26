@@ -393,6 +393,7 @@
 		998605781E5439CC00CE5D4B /* ContactVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 998605771E5439CC00CE5D4B /* ContactVC.m */; };
 		9987A6BE20206CCB00D554B5 /* icon_approving.png in Resources */ = {isa = PBXBuildFile; fileRef = 9987A6BC20206CCB00D554B5 /* icon_approving.png */; };
 		9987A6BF20206CCB00D554B5 /* icon_approved.png in Resources */ = {isa = PBXBuildFile; fileRef = 9987A6BD20206CCB00D554B5 /* icon_approved.png */; };
+		9989ACF120440C0E00968CE2 /* Default-375w-812h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9989ACEF20440C0D00968CE2 /* Default-375w-812h@3x.png */; };
 		999568BB1EA84DF600508791 /* SalaryVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 999568BA1EA84DF600508791 /* SalaryVC.m */; };
 		9996EB621E72518A00AA3F16 /* icon_read@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9996EB5E1E72518A00AA3F16 /* icon_read@2x.png */; };
 		9996EB631E72518A00AA3F16 /* icon_read@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9996EB5F1E72518A00AA3F16 /* icon_read@3x.png */; };
@@ -1343,6 +1344,7 @@
 		998605771E5439CC00CE5D4B /* ContactVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactVC.m; sourceTree = "<group>"; };
 		9987A6BC20206CCB00D554B5 /* icon_approving.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_approving.png; sourceTree = "<group>"; };
 		9987A6BD20206CCB00D554B5 /* icon_approved.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_approved.png; sourceTree = "<group>"; };
+		9989ACEF20440C0D00968CE2 /* Default-375w-812h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-375w-812h@3x.png"; sourceTree = "<group>"; };
 		999568B91EA84DF600508791 /* SalaryVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SalaryVC.h; sourceTree = "<group>"; };
 		999568BA1EA84DF600508791 /* SalaryVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SalaryVC.m; sourceTree = "<group>"; };
 		9996EB5E1E72518A00AA3F16 /* icon_read@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_read@2x.png"; sourceTree = "<group>"; };
@@ -3226,6 +3228,7 @@
 		99AAA71B1E2DF5C60043B342 /* LauchImages */ = {
 			isa = PBXGroup;
 			children = (
+				9989ACEF20440C0D00968CE2 /* Default-375w-812h@3x.png */,
 				99AAA71C1E2DF5C60043B342 /* Default-375w-667h@2x.png */,
 				99AAA71D1E2DF5C60043B342 /* Default-414w-736h@3x.png */,
 				99AAA71E1E2DF5C60043B342 /* Default-568h@2x.png */,
@@ -4098,6 +4101,7 @@
 				9905A6381E6FFA30006A1BF9 /* FontAwesome.otf in Resources */,
 				99A66B331EC2F5D200ED5D4B /* icon_folder@2x.png in Resources */,
 				99233A211E306F3900A5486C /* default_avatar@2x.png in Resources */,
+				9989ACF120440C0E00968CE2 /* Default-375w-812h@3x.png in Resources */,
 				9905A63C1E6FFA30006A1BF9 /* Material-Design-Iconic-Font.ttf in Resources */,
 				99F997EA1EBADF8700860ACD /* work_icon_feedback@2x.png in Resources */,
 				99AAA84E1E2DF5C60043B342 /* 76@2x.png in Resources */,
