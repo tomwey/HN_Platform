@@ -97,8 +97,8 @@
         self.centerLabel.text = @"完成率";
     }
     
-    self.planLabel.text = [NSString stringWithFormat:@"计划：%.2f亿", plan];
-    self.realLabel.text = [NSString stringWithFormat:@"实际：%.2f亿", real];
+    self.planLabel.text = [NSString stringWithFormat:@"计划：%.2f亿", plan/10000.0];
+    self.realLabel.text = [NSString stringWithFormat:@"实际：%.2f亿", real/10000.0];
     
     if ( [chartData[@"flag"] boolValue] ) {
 //        self.planLabel.hidden = NO;

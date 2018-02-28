@@ -157,7 +157,7 @@
     [[self apiServiceWithName:@"APIService"]
      POST:nil params:@{
                        @"dotype": @"GetData",
-                       @"funname": @"BI签约回款多条件查询APP",
+                       @"funname": @"平台经营分析数据查询APP",
                        @"param1": [@(self.timeSelect.year) description],//areaId ?: @"-1",
                        @"param2": quarterId,
                        @"param3": [@(self.timeSelect.month) description],
