@@ -302,9 +302,9 @@
         }
     }
     
-    if (self.needUpdateWeekOfMonth) {
-        self.weekOfMonth = [self weekOfMonthForNow];
-    }
+//    if (self.needUpdateWeekOfMonth) {
+//        self.weekOfMonth = [self weekOfMonthForNow];
+//    }
     
     self.weekButton.userData = [self currentWeekData];
 }

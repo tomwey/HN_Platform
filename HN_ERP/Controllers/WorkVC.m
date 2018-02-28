@@ -88,7 +88,7 @@
                             },
                         @{
                             @"icon": @"tab_plan.png",
-                            @"name": @"计划",
+                            @"name": @"计划看板",
                             @"page": @"PlanVC",
                             },
                         @{
