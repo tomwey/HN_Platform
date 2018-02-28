@@ -97,19 +97,19 @@
         self.centerLabel.text = @"完成率";
     }
     
-    self.planLabel.text = [NSString stringWithFormat:@"计划：%.2f亿", plan/10000.0];
-    self.realLabel.text = [NSString stringWithFormat:@"实际：%.2f亿", real/10000.0];
+    self.planLabel.text = [NSString stringWithFormat:@"计划：%.2f万", plan];
+    self.realLabel.text = [NSString stringWithFormat:@"实际：%.2f万", real];
     
-    if ( [chartData[@"flag"] boolValue] ) {
+    //if ( [chartData[@"flag"] boolValue] ) {
 //        self.planLabel.hidden = NO;
         self.realLabel.hidden = NO;
 //        self.centerLabel.hidden = NO;
-    } else {
+    //} else {
 //        self.planLabel.hidden = YES;
-        self.realLabel.hidden = YES;
+      //  self.realLabel.hidden = YES;
         
 //        self.centerLabel.hidden = YES;
-    }
+    //}
     
     self.realLabel.textColor = MAIN_THEME_COLOR;
     
