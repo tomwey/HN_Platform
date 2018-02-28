@@ -545,6 +545,7 @@
 		99B18FDD1E4B0B8100E37AB0 /* AWPagerTabStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B18FDC1E4B0B8100E37AB0 /* AWPagerTabStrip.m */; };
 		99B1FC891EA4710600CC389F /* NewsListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B1FC881EA4710600CC389F /* NewsListVC.m */; };
 		99B1FC8C1EA4711500CC389F /* NewsDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B1FC8B1EA4711500CC389F /* NewsDetailVC.m */; };
+		99B24265204676C0005DCE26 /* ResetPasswordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B24263204676BF005DCE26 /* ResetPasswordVC.m */; };
 		99B61C251E9E14740072D919 /* LandDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B61C241E9E14740072D919 /* LandDetailVC.m */; };
 		99B61C281E9E2E330072D919 /* MeetingRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B61C271E9E2E330072D919 /* MeetingRoom.m */; };
 		99B61C2B1E9E35BE0072D919 /* DateSelectControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 99B61C2A1E9E35BE0072D919 /* DateSelectControl.m */; };
@@ -1622,6 +1623,8 @@
 		99B1FC881EA4710600CC389F /* NewsListVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsListVC.m; sourceTree = "<group>"; };
 		99B1FC8A1EA4711500CC389F /* NewsDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewsDetailVC.h; sourceTree = "<group>"; };
 		99B1FC8B1EA4711500CC389F /* NewsDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewsDetailVC.m; sourceTree = "<group>"; };
+		99B24263204676BF005DCE26 /* ResetPasswordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPasswordVC.m; sourceTree = "<group>"; };
+		99B24264204676BF005DCE26 /* ResetPasswordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetPasswordVC.h; sourceTree = "<group>"; };
 		99B61C231E9E14740072D919 /* LandDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LandDetailVC.h; sourceTree = "<group>"; };
 		99B61C241E9E14740072D919 /* LandDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LandDetailVC.m; sourceTree = "<group>"; };
 		99B61C261E9E2E330072D919 /* MeetingRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingRoom.h; sourceTree = "<group>"; };
@@ -3040,6 +3043,8 @@
 				99AAA6AD1E2DF5C50043B342 /* LoginVC.m */,
 				99AAA6B01E2DF5C50043B342 /* NSObject+RTIDataService.h */,
 				99AAA6B11E2DF5C50043B342 /* NSObject+RTIDataService.m */,
+				99B24264204676BF005DCE26 /* ResetPasswordVC.h */,
+				99B24263204676BF005DCE26 /* ResetPasswordVC.m */,
 				99AAA6B41E2DF5C50043B342 /* ParamUtil.h */,
 				99AAA6B51E2DF5C50043B342 /* ParamUtil.m */,
 				9923392C1E31BC6F00BD5574 /* NSObject+APIService.h */,
@@ -4201,6 +4206,7 @@
 				999EF5121F9DCFE600A7F58F /* OutputProject.m in Sources */,
 				99EFAB601E9DCBBF00EBCFF5 /* BaseSearchVC.m in Sources */,
 				99233A0A1E3048C600A5486C /* DocumentVC.m in Sources */,
+				99B24265204676C0005DCE26 /* ResetPasswordVC.m in Sources */,
 				99B7471A1EE100E900876389 /* SelectButton.m in Sources */,
 				998605691E54236400CE5D4B /* CTPersistanceQueryCommand+SchemaManipulations.m in Sources */,
 				99AAA8181E2DF5C60043B342 /* ParamUtil.m in Sources */,

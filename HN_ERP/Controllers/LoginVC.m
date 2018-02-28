@@ -221,6 +221,7 @@
 //                                position:CSToastPositionCenter];
              
              // 页面跳转
+             /*
              AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
              
              [app resetRootController];
@@ -231,7 +232,28 @@
              [nav pushViewController:app.appRootController animated:YES];
              
              // 记录APP登录日志
-             [[SysLogService sharedInstance] logForUserLogin];
+             [[SysLogService sharedInstance] logForUserLogin];*/
+             
+             if ([self.passField.text isEqualToString:@"000000"]) {
+                 [self.navigationController pushViewController:
+                  [[AWMediator sharedInstance] openVCWithName:@"ResetPasswordVC" params:nil]
+                                                      animated:YES];
+             } else {
+                 [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"validLogin"];
+                 [[NSUserDefaults standardUserDefaults] synchronize];
+                 
+                 AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                 
+                 [app resetRootController];
+                 
+                 //             UINavigationController *nav = [[UINavigationController alloc] init];
+                 //             [nav pushViewController:app.appRootController animated:NO];
+                 UINavigationController *nav = AWAppWindow().navController;
+                 [nav pushViewController:app.appRootController animated:YES];
+                 
+                 // 记录APP登录日志
+                 [[SysLogService sharedInstance] logForUserLogin];
+             }
              
 //             AWAppWindow().rootViewController = app.appRootController;
              

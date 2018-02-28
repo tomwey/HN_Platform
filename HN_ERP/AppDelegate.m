@@ -70,11 +70,24 @@
     
     id currentUser = [[UserService sharedInstance] currentUser];
     if (currentUser) {
-        rootVC = [UIViewController createControllerWithName:@"WorkVC"];
-        //self.appRootController;
+        BOOL hasChangedPwd = [[NSUserDefaults standardUserDefaults] boolForKey:@"hasChangedPWD"];
+        if (hasChangedPwd || [[NSUserDefaults standardUserDefaults] boolForKey:@"validLogin"]) {
+//            rootVC = self.appRootController;
+            rootVC = [UIViewController createControllerWithName:@"WorkVC"];
+        } else {
+            rootVC = [[NSClassFromString(@"ResetPasswordVC") alloc] init];
+        }
     } else {
         rootVC = [[NSClassFromString(@"LoginVC") alloc] init];
     }
+    
+//    id currentUser = [[UserService sharedInstance] currentUser];
+//    if (currentUser) {
+//        rootVC = [UIViewController createControllerWithName:@"WorkVC"];
+//        //self.appRootController;
+//    } else {
+//        rootVC = [[NSClassFromString(@"LoginVC") alloc] init];
+//    }
     return rootVC;
 }
 

@@ -6,26 +6,28 @@
 //  Copyright © 2016年 tomwey. All rights reserved.
 //
 
-#import "PasswordVC.h"
+#import "ResetPasswordVC.h"
 #import "Defines.h"
 
-@interface PasswordVC () <UITextFieldDelegate>
+@interface ResetPasswordVC () <UITextFieldDelegate>
 
 @property (nonatomic, weak) UITextField *password1Field;
 @property (nonatomic, weak) UITextField *nPassword1Field;
-@property (nonatomic, weak) UITextField *nPassword2Field;
+//@property (nonatomic, weak) UITextField *nPassword2Field;
 
 @end
 
-@implementation PasswordVC
+@implementation ResetPasswordVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navBar.title = @"修改密码";
+    self.navBar.title = @"修改登录密码";
+    
+    [self addLeftItemWithView:nil];
     
     // 用户输入背景
-    UIView *inputBGView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.width - 30, 108 + 54)];
+    UIView *inputBGView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.contentView.width - 30, 108)];
     inputBGView.cornerRadius = 8;
     [self.contentView addSubview:inputBGView];
     inputBGView.backgroundColor = [UIColor whiteColor];
@@ -40,7 +42,7 @@
     // 密码
     UITextField *oldPassword = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, inputBGView.width - 20, 34)];
     [inputBGView addSubview:oldPassword];
-    oldPassword.placeholder = @"输入旧密码";
+    oldPassword.placeholder = @"输入新密码";
     oldPassword.secureTextEntry = YES;
     oldPassword.delegate = self;
     
@@ -55,7 +57,7 @@
     UITextField *newPassword1 = [[UITextField alloc] initWithFrame:CGRectMake(10, oldPassword.bottom + 10 + 10,
                                                                               inputBGView.width - 20, 34)];
     [inputBGView addSubview:newPassword1];
-    newPassword1.placeholder = @"输入新密码";
+    newPassword1.placeholder = @"确认新密码";
     newPassword1.secureTextEntry = YES;
     newPassword1.delegate = self;
     
@@ -67,21 +69,12 @@
     hairLine.position = CGPointMake(0, newPassword1.bottom + 10);
     
     // 确认密码
-    UITextField *codeField = [[UITextField alloc] initWithFrame:CGRectMake(10, newPassword1.bottom + 10 + 10, inputBGView.width - 20, 34)];
-    [inputBGView addSubview:codeField];
-    codeField.placeholder = @"确认新密码";
-    codeField.returnKeyType = UIReturnKeyDone;
-    codeField.secureTextEntry = YES;
-    codeField.delegate = self;
-    
-    self.nPassword2Field = codeField;
     
     self.password1Field.tintColor =
-    self.nPassword1Field.tintColor =
-    self.nPassword2Field.tintColor = MAIN_THEME_COLOR;
+    self.nPassword1Field.tintColor = MAIN_THEME_COLOR;
     
-    self.password1Field.returnKeyType =
-    self.nPassword1Field.returnKeyType = UIReturnKeyNext;
+    self.password1Field.returnKeyType = UIReturnKeyNext;
+    self.nPassword1Field.returnKeyType = UIReturnKeyDone;
     
     // 确定按钮
     AWButton *okButton = [AWButton buttonWithTitle:@"完成" color:BUTTON_COLOR];
@@ -96,8 +89,6 @@
     if ( textField == self.password1Field ) {
         [self.nPassword1Field becomeFirstResponder];
     } else if ( textField == self.nPassword1Field ) {
-        [self.nPassword2Field becomeFirstResponder];
-    } else if ( self.nPassword2Field == textField ) {
         [textField resignFirstResponder];
         [self done];
     }
@@ -108,30 +99,36 @@
 - (void)done
 {
     if ( self.password1Field.text.length == 0 ) {
-        [self.contentView showHUDWithText:@"旧密码不能为空"
-                                   offset:CGPointMake(0, 20)];
-        return;
-    }
-    
-    if ( self.nPassword1Field.text.length == 0 ) {
         [self.contentView showHUDWithText:@"新密码不能为空"
                                    offset:CGPointMake(0, 20)];
         return;
     }
     
-    if ( self.nPassword2Field.text.length == 0 ) {
+    if ( self.nPassword1Field.text.length == 0 ) {
         [self.contentView showHUDWithText:@"确认密码不能为空"
                                    offset:CGPointMake(0, 20)];
         return;
     }
     
-    if ( ![self.nPassword1Field.text isEqualToString:self.nPassword2Field.text] ) {
+    if ( self.password1Field.text.length < 6 || self.password1Field.text.length > 20 ) {
+        [self.contentView showHUDWithText:@"密码长度为6-20位"
+                                   offset:CGPointMake(0, 20)];
+        return;
+    }
+    
+    if ( self.nPassword1Field.text.length < 6 || self.nPassword1Field.text.length > 20 ) {
+        [self.contentView showHUDWithText:@"密码长度为6-20位"
+                                   offset:CGPointMake(0, 20)];
+        return;
+    }
+    
+    if ( ![self.nPassword1Field.text isEqualToString:self.password1Field.text] ) {
         [self.contentView showHUDWithText:@"两次密码输入不一致"
                                    offset:CGPointMake(0, 20)];
         return;
     }
     
-    if ( [self.nPassword1Field.text isEqualToString:@"000000"] ) {
+    if ( [@"000000" isEqualToString:self.password1Field.text] ) {
         [self.contentView showHUDWithText:@"新密码不能为初始密码"
                                    offset:CGPointMake(0, 20)];
         return;
@@ -145,14 +142,17 @@
     __weak typeof(self) me = self;
     [[self apiServiceWithName:@"APIService"]
      POST:nil
-     params:@{
-              @"dotype": @"changepwd",
-              @"manid": manID,
-              @"oldpwd": self.password1Field.text,
-              @"newpwd": self.nPassword1Field.text,
-              } completion:^(id result, NSError *error) {
+     params:
+     @{
+       @"dotype": @"changepwd",
+       @"manid": manID,
+       @"oldpwd": @"000000",
+       @"newpwd": self.password1Field.text,
+       } completion:^(id result, NSError *error) {
                   [me handleResult:result error:error];
               }];
+    
+    
 }
 
 - (void)handleResult:(id)result error:(NSError *)error
@@ -169,12 +169,22 @@
             NSInteger code = [item[@"code"] integerValue];
             NSString *msg = [item[@"codemsg"] description];
             
+//            id resultData = result[@"data"];
+            
 //            [self.contentView showHUDWithText:msg succeed:code == 0];
             
             if ( code == 0 ) {
-                [self.navigationController.view showHUDWithText:msg succeed:YES];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"hasChangedPWD"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
                 
-                [self.navigationController popViewControllerAnimated:YES];
+                AppDelegate *app = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+                
+                [app resetRootController];
+                
+                //             UINavigationController *nav = [[UINavigationController alloc] init];
+                //             [nav pushViewController:app.appRootController animated:NO];
+                UINavigationController *nav = AWAppWindow().navController;
+                [nav pushViewController:app.appRootController animated:YES];
             } else {
                 [self.contentView showHUDWithText:msg succeed:NO];
             }
