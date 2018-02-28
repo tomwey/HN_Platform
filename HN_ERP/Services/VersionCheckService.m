@@ -136,7 +136,7 @@
         self.checking = NO;
 //        itms-services://?action=download-manifest&url=https://erp20.heneng.cn:16666/IOS/HN_ERP.plist
 //        https://erp20.heneng.cn:16666/IOS
-        BOOL flag = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://erp20.heneng.cn:16666/IOS/HN_ERP.plist"]];
+        BOOL flag = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-services://?action=download-manifest&url=https://erp20.heneng.cn:16666/IOS/HN_Platform.plist"]];
         [[UIApplication sharedApplication] close];
         
         if ( flag ) {
