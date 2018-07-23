@@ -49,6 +49,16 @@
 			<key>action</key>
 			<string>openQRCode</string>
 		</dict>
+		<dict>
+			<key>icon</key>
+			<string>icon_bind.png</string>
+			<key>label</key>
+			<string>绑定手机</string>
+			<key>value</key>
+			<string></string>
+			<key>action</key>
+			<string>bindMobile</string>
+		</dict>
 	</array>
 	<array>
 		<dict>

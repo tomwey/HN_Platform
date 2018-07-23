@@ -120,13 +120,22 @@
     
     self.userField.tintColor = self.passField.tintColor = MAIN_THEME_COLOR;
     
+    UIButton *forgetBtn = AWCreateTextButton(CGRectMake(0, 0, 80, 40),
+                                             @"忘记密码",
+                                             MAIN_THEME_COLOR,
+                                             self,
+                                             @selector(forgetPassword));
+    [self.contentView addSubview:forgetBtn];
+    forgetBtn.position = CGPointMake(inputBGView2.right - forgetBtn.width, inputBGView2.bottom);
+    forgetBtn.titleLabel.font = AWSystemFontWithSize(14, NO);
+    
     ////////////////////// 登录按钮
     AWButton *loginButton = [AWButton buttonWithTitle:@"登录" color:MAIN_THEME_COLOR];
     loginButton.outline = YES;
     
     [self.contentView addSubview:loginButton];
     loginButton.frame = inputBGView.frame;
-    loginButton.top = inputBGView2.bottom + 30;
+    loginButton.top = inputBGView2.bottom + 30 + 20;
     loginButton.cornerRadius = inputBGView.cornerRadius;
     
     [loginButton addTarget:self forAction:@selector(doLogin)];
@@ -138,6 +147,12 @@
     bottomView.center = CGPointMake(self.contentView.width / 2,
                                    self.contentView.height - 30 - bottomView.height / 2);
     
+}
+
+- (void)forgetPassword
+{
+    UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"ForgetPasswordVC" params:nil];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)togglePass:(UIButton *)sender

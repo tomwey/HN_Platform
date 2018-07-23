@@ -230,6 +230,12 @@
     [AWAppWindow().navController pushViewController:vc animated:YES];
 }
 
+- (void)bindMobile
+{
+    UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"BindMobileVC" params:nil];
+    [AWAppWindow().navController pushViewController:vc animated:YES];
+}
+
 - (void)updatePassword
 {
     UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:@"PasswordVC" params:nil];
