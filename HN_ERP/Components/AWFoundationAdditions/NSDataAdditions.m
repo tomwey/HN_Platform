@@ -45,6 +45,22 @@
     return nil;
 }
 
+- (NSString *)aes256_encrypt_hex:(NSString *)key
+{
+    NSData *result = [self aes256_encrypt:key];
+    
+    if (result && result.length > 0) {
+        Byte *datas = (Byte*)[result bytes];
+        NSMutableString *output = [NSMutableString stringWithCapacity:result.length * 2];
+        for (int i = 0; i < result.length; i++) {
+            [output appendFormat:@"%02x", datas[i]];
+        }
+        return output;
+    }
+    
+    return nil;
+}
+
 /** 解密 */
 - (NSData*)aes256_decrypt:(NSString *)key
 {

@@ -341,6 +341,7 @@
 		996E64421E7146F7001EC40D /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 996E64411E7146F7001EC40D /* libresolv.tbd */; };
 		996E64451E714A21001EC40D /* BaseAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 996E64441E714A21001EC40D /* BaseAppDelegate.m */; };
 		996E64491E715F21001EC40D /* HNAlertHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 996E64481E715F21001EC40D /* HNAlertHelper.m */; };
+		9976A8E621C0D7380013F6DA /* SaleRegVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 9976A8E521C0D7380013F6DA /* SaleRegVC.m */; };
 		9979474E1EB1FFB60064F1BA /* PNBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9979472D1EB1FFB50064F1BA /* PNBar.m */; };
 		9979474F1EB1FFB60064F1BA /* PNBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 9979472F1EB1FFB50064F1BA /* PNBarChart.m */; };
 		997947501EB1FFB60064F1BA /* PNChartLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 997947331EB1FFB50064F1BA /* PNChartLabel.m */; };
@@ -1248,6 +1249,8 @@
 		996E64461E715944001EC40D /* HN_ERP.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HN_ERP.entitlements; sourceTree = "<group>"; };
 		996E64471E715F21001EC40D /* HNAlertHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HNAlertHelper.h; sourceTree = "<group>"; };
 		996E64481E715F21001EC40D /* HNAlertHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HNAlertHelper.m; sourceTree = "<group>"; };
+		9976A8E321C0D7380013F6DA /* SaleRegVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SaleRegVC.h; sourceTree = "<group>"; };
+		9976A8E521C0D7380013F6DA /* SaleRegVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SaleRegVC.m; sourceTree = "<group>"; };
 		9979472C1EB1FFB50064F1BA /* PNBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNBar.h; sourceTree = "<group>"; };
 		9979472D1EB1FFB50064F1BA /* PNBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PNBar.m; sourceTree = "<group>"; };
 		9979472E1EB1FFB50064F1BA /* PNBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PNBarChart.h; sourceTree = "<group>"; };
@@ -3790,6 +3793,8 @@
 		99F542DB1E7A5E30003A4117 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				9976A8E321C0D7380013F6DA /* SaleRegVC.h */,
+				9976A8E521C0D7380013F6DA /* SaleRegVC.m */,
 				9967FE731F99D92E002CDD26 /* Output */,
 				992BA25D1EFBCE7B00AAE3A1 /* PlanListVC.h */,
 				992BA25C1EFBCE7B00AAE3A1 /* PlanListVC.m */,
@@ -4214,6 +4219,7 @@
 				99E53D541E9B716E00CA78D7 /* LandCell.m in Sources */,
 				99AAA82F1E2DF5C60043B342 /* UIButton+AFNetworking.m in Sources */,
 				99FDEB3A1F6683D2005B6BFA /* HotSaleRankView.m in Sources */,
+				9976A8E621C0D7380013F6DA /* SaleRegVC.m in Sources */,
 				99A66B251EC2BF1C00ED5D4B /* DocAttachmentListVC.m in Sources */,
 				99AAA7E11E2DF5C60043B342 /* CustomNavBar.m in Sources */,
 				99AAA7EB1E2DF5C60043B342 /* AWLoadingResultView.m in Sources */,

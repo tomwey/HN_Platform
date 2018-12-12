@@ -18,6 +18,8 @@
 - (NSData *)aes256_encrypt:(NSString *)key;
 - (NSData *)aes256_decrypt:(NSString *)key;
 
+- (NSString *)aes256_encrypt_hex:(NSString *)key;
+
 @end
 
 @interface NSData (Compression)
