@@ -52,7 +52,8 @@
     NSDictionary *dict = @{
                            @"manid": [user[@"man_id"] description] ?: @"",
                            @"manname": [user[@"man_name"] description] ?: @"",
-                           @"powerids": self.params[@"powerids"]
+                           @"powerids": self.params[@"powerids"],
+                           @"hide": self.params[@"hide"] ?: @"0"
                            };
     NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
     NSString *result = [data aes256_encrypt_hex:@"Hnerp_2018"];

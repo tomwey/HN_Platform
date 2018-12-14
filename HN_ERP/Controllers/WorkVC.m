@@ -80,35 +80,65 @@
     //    header.contentMode = UIViewContentModeScaleAspectFill
     [self.contentView addSubview:header];
     
-    self.dataSource = @[
-                        @[@{
-                            @"icon": @"tab_flow_1.png",
-                            @"name": @"流程待办",
-                            @"page": @"OAListVC",
-                            },
-                        @{
-                            @"icon": @"tab_plan.png",
-                            @"name": @"计划看板",
-                            @"page": @"PlanVC",
-                            },
-                        @{
-                            @"icon": @"work_icon_bi.png",
-                            @"name": @"经营分析",
-                            @"page": @"BIVC",
-                            }],
-                        @[
-                            @{
-                                @"icon": @"work_icon_setting.png",
-                                @"name": @"个人中心",
-                                @"page": @"SettingVC",
-                                },
-                            @{
-                                @"icon": @"icon_feedback.png",
-                                @"name": @"意见反馈",
-                                @"page": @"FeedbackVC",
-                                },
-                            ]
-                        ];
+    NSLog(@"%@", [[UserService sharedInstance] currentUser]);
+    
+    id user = [[UserService sharedInstance] currentUser];
+    if ([user[@"wdwtype"] integerValue] == 2) {
+        self.dataSource = @[
+                            @[@{
+                                  @"icon": @"tab_flow_1.png",
+                                  @"name": @"流程待办",
+                                  @"page": @"OAListVC",
+                                  },
+                              @{
+                                  @"icon": @"work_icon_saler.png",
+                                  @"name": @"销售系统",
+                                  @"page": @"SaleRegVC",
+                                  }],
+                            @[
+                                @{
+                                    @"icon": @"work_icon_setting.png",
+                                    @"name": @"个人中心",
+                                    @"page": @"SettingVC",
+                                    },
+                                @{
+                                    @"icon": @"icon_feedback.png",
+                                    @"name": @"意见反馈",
+                                    @"page": @"FeedbackVC",
+                                    },
+                                ]
+                            ];
+    } else {
+        self.dataSource = @[
+                            @[@{
+                                  @"icon": @"tab_flow_1.png",
+                                  @"name": @"流程待办",
+                                  @"page": @"OAListVC",
+                                  },
+                              @{
+                                  @"icon": @"tab_plan.png",
+                                  @"name": @"计划看板",
+                                  @"page": @"PlanVC",
+                                  },
+                              @{
+                                  @"icon": @"work_icon_bi.png",
+                                  @"name": @"经营分析",
+                                  @"page": @"BIVC",
+                                  }],
+                            @[
+                                @{
+                                    @"icon": @"work_icon_setting.png",
+                                    @"name": @"个人中心",
+                                    @"page": @"SettingVC",
+                                    },
+                                @{
+                                    @"icon": @"icon_feedback.png",
+                                    @"name": @"意见反馈",
+                                    @"page": @"FeedbackVC",
+                                    },
+                                ]
+                            ];
+    }
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, header.bottom,
                                                                    self.contentView.width,
@@ -239,7 +269,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSString *vcName = self.dataSource[indexPath.section][indexPath.row][@"page"];
-    UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:vcName params:nil];
+    id params = nil;
+    if ([vcName isEqualToString:@"SaleRegVC"]) {
+        params = @{ @"powerids": @"18,19,21,22,23", @"hide": @"1" };
+    }
+    UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:vcName params:params];
     [AWAppWindow().navController pushViewController:vc animated:YES];
 }
 
