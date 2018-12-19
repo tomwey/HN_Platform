@@ -56,10 +56,11 @@
                            @"hide": self.params[@"hide"] ?: @"0"
                            };
     NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:NULL];
-    NSString *result = [data aes256_encrypt_hex:@"Hnerp_2018"];
+    NSString *result = [data aes256_encrypt_hex:@"HN_GroupAES_2018"];
     NSLog(@"#####: %@", result);
     
-    NSString *urlString = [NSString stringWithFormat:@"http://erp20-sms.heneng.cn:16712?key=%@",result];
+    NSString *apiServer = @"http://erp20-sms.heneng.cn:16712";
+    NSString *urlString = [NSString stringWithFormat:@"%@?key=%@",apiServer, result];
     
     NSURL *url = [NSURL URLWithString:urlString];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
