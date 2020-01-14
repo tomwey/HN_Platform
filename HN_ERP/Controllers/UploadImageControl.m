@@ -222,7 +222,7 @@
 //    }
     
     __weak typeof(self) weakSelf = self;
-    NSString *uploadUrl = [NSString stringWithFormat:@"%@/upload", API_HOST];
+    NSString *uploadUrl = UPLOAD_URL;//[NSString stringWithFormat:@"%@/upload", API_HOST];
     self.uploadOperation =
     [[AFHTTPRequestOperationManager manager] POST:uploadUrl
                                        parameters:@{

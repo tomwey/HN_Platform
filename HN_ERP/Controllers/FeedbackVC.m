@@ -366,7 +366,7 @@
     hud.label.text = @"上传中...";
     //    hud.tintColor = MAIN_THEME_COLOR;
     
-    NSString *uploadUrl = [NSString stringWithFormat:@"%@/upload", API_HOST];
+    NSString *uploadUrl = UPLOAD_URL;//[NSString stringWithFormat:@"%@/upload", API_HOST];
     self.uploadOperation =
     [[AFHTTPRequestOperationManager manager] POST:uploadUrl
                                        parameters:@{
@@ -431,7 +431,7 @@
     hud.progress = 0.0f;
     hud.label.text = @"上传中...";
     
-    NSString *uploadUrl = [NSString stringWithFormat:@"%@/upload", API_HOST];
+    NSString *uploadUrl = UPLOAD_URL;//[NSString stringWithFormat:@"%@/upload", API_HOST];
     self.uploadOperation =
     [[AFHTTPRequestOperationManager manager] POST:uploadUrl
                                        parameters:@{

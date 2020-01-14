@@ -23,6 +23,8 @@
 
 @property (nonatomic, strong) NSArray *badges;
 
+@property (nonatomic, strong) NSMutableArray *powerids;
+
 @end
 
 @implementation WorkVC
@@ -207,12 +209,12 @@
     
 //    self.scrollView.hidden = YES;
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self
-//                                             selector:@selector(loadManPower)
-//                                                 name:UIApplicationWillEnterForegroundNotification
-//                                               object:nil];
-//
-//    [self loadManPower];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(loadManPower)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+
+    [self loadManPower];
     
     // 获取新的待办流程
 //    [self fetchNewFlowCounts];
@@ -271,7 +273,7 @@
     NSString *vcName = self.dataSource[indexPath.section][indexPath.row][@"page"];
     id params = nil;
     if ([vcName isEqualToString:@"SaleRegVC"]) {
-        params = @{ @"powerids": @"18,19,21,22,23", @"hide": @"1" };
+        params = @{ @"powerids": [self.powerids componentsJoinedByString:@","], @"hide": @"1" };
     }
     UIViewController *vc = [[AWMediator sharedInstance] openVCWithName:vcName params:params];
     [AWAppWindow().navController pushViewController:vc animated:YES];
@@ -437,7 +439,9 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    [self loadManPower];
+    if (buttonIndex == 1) {
+        [self loadManPower];
+    }
 }
 
 - (void)loadManPower
@@ -467,10 +471,10 @@
     
     if (error) {
         [[[UIAlertView alloc] initWithTitle:@"加载失败，请重试"
-                                   message:@""
-                                  delegate:self
-                         cancelButtonTitle:@"重试"
-                          otherButtonTitles:nil] show];
+                                    message:@""
+                                   delegate:self
+                          cancelButtonTitle:@"取消"
+                          otherButtonTitles:@"重试",nil] show];
     } else {
         if ([result[@"rowcount"] integerValue] == 0) {
             [self.contentView showHUDWithText:@"没有找到数据" offset:CGPointMake(0,20)];
@@ -478,25 +482,35 @@
             NSMutableArray *temp = [NSMutableArray array];
             NSArray *data = result[@"data"];
             
-            [[AppManager sharedInstance] removeAllAbilities];
+            self.powerids = [@[] mutableCopy];
             
             for (id dict in data) {
                 [[AppManager sharedInstance] addAbility:dict forKey:dict[@"funcname"]];
-            }
-            
-            for (id obj in self.modules) {
-                for (id dict in data) {
-                    if ([dict[@"funcname"] isEqualToString:obj[@"label"]] &&
-                        [dict[@"pi_id"] integerValue] == 1) {
-                        [temp addObject:obj];
-                        break;
-                    }
+                
+                if ( [dict[@"funcname"] isEqualToString:@"销售系统"] ) {
+                    [self.powerids addObject:[dict[@"powerid"] description]];
                 }
             }
             
-            self.modules = temp;
-            
-            [self initModules];
+//            [[AppManager sharedInstance] removeAllAbilities];
+//
+//            for (id dict in data) {
+//                [[AppManager sharedInstance] addAbility:dict forKey:dict[@"funcname"]];
+//            }
+//
+//            for (id obj in self.modules) {
+//                for (id dict in data) {
+//                    if ([dict[@"funcname"] isEqualToString:obj[@"label"]] &&
+//                        [dict[@"pi_id"] integerValue] == 1) {
+//                        [temp addObject:obj];
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            self.modules = temp;
+//
+//            [self initModules];
         }
     }
     

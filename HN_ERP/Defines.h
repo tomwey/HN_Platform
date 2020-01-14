@@ -63,6 +63,7 @@
 ////// API接口
 #define API_HOST      @"http://erp20-app.heneng.cn:16681"
 #define H5_HOST       @"http://erp20.heneng.cn:16669"//@"http://erp2017-mobile.heneng.cn:8088" // @"https://erp20.heneng.cn:16669"
+#define UPLOAD_URL    @"http://erp20-annex.heneng.cn:20021/up"
 
 #define API_KEY    @"27654725447"
 #define API_SECRET @"dfjhskdhsiwnvhkjhdguwnvbxmn"
